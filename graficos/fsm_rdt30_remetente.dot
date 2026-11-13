@@ -1,0 +1,21 @@
+// FSM do remetente rdt3.0. Gerar a imagem com:
+//   dot -Tpng -Gdpi=150 graficos/fsm_rdt30_remetente.dot -o graficos/fsm_rdt30_remetente.png
+digraph rdt30_remetente {
+  rankdir=LR; nodesep=0.9; ranksep=1.2; pad=0.4;
+  label="FSM do remetente rdt3.0 (pare-e-espera)"; labelloc=t; fontsize=15;
+  fontname="Helvetica";
+  node [fontname="Helvetica", fontsize=11, shape=ellipse, style=filled, fillcolor="#eef3fb"];
+  edge [fontname="Helvetica", fontsize=9];
+
+  s0 [label="Espera\nchamada 0"];
+  a0 [label="Espera\nACK 0"];
+  s1 [label="Espera\nchamada 1"];
+  a1 [label="Espera\nACK 1"];
+
+  s0 -> a0 [label="dados do arquivo\nmake(DADOS, 0) ; sendto ;\niniciar temporizador"];
+  a0 -> a0 [label="timeout: retransmite pacote 0 ;\nreiniciar temporizador\n─────────\nACK corrompido ou ack != 0: ignora"];
+  a0 -> s1 [label="ACK íntegro, ack == 0\nparar temporizador"];
+  s1 -> a1 [label="dados do arquivo\nmake(DADOS, 1) ; sendto ;\niniciar temporizador"];
+  a1 -> a1 [label="timeout: retransmite pacote 1 ;\nreiniciar temporizador\n─────────\nACK corrompido ou ack != 1: ignora"];
+  a1 -> s0 [label="ACK íntegro, ack == 1\nparar temporizador", tailport=s, headport=s];
+}

@@ -1,0 +1,17 @@
+// FSM do receptor rdt3.0. Gerar a imagem com:
+//   dot -Tpng -Gdpi=150 graficos/fsm_rdt30_receptor.dot -o graficos/fsm_rdt30_receptor.png
+digraph rdt30_receptor {
+  rankdir=LR; nodesep=1.4; pad=0.4;
+  label="FSM do receptor rdt3.0"; labelloc=t; fontsize=15;
+  fontname="Helvetica";
+  node [fontname="Helvetica", fontsize=11, shape=ellipse, style=filled, fillcolor="#fbf0ee"];
+  edge [fontname="Helvetica", fontsize=9];
+
+  r0 [label="Espera\npacote 0"];
+  r1 [label="Espera\npacote 1"];
+
+  r0 -> r1 [label="íntegro, seq == 0\nentrega dados ; ACK 0"];
+  r1 -> r0 [label="íntegro, seq == 1\nentrega dados ; ACK 1"];
+  r0 -> r0 [label="corrompido ou seq == 1\ndescarta ; reenvia ACK 1"];
+  r1 -> r1 [label="corrompido ou seq == 0\ndescarta ; reenvia ACK 0"];
+}
