@@ -1,5 +1,6 @@
 import random
 import socket
+import time
 
 class UnreliableSocket:
 
@@ -13,6 +14,8 @@ class UnreliableSocket:
 
     def sendto(self, data, addr):
         self.enviados += 1
+        if self.delay > 0:
+            time.sleep(self.delay)  # atraso de propagação simulado
         if self.rng.random() < self.loss:
             self.perdidos += 1
             return len(data)
