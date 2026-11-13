@@ -1,0 +1,24 @@
+// FSM do receptor Go-Back-N. Gerar a imagem com:
+//   dot -Tpng -Gdpi=150 graficos/fsm_gbn_receptor.dot -o graficos/fsm_gbn_receptor.png
+// Estados = elipses; cada transição = caixa amarela (evento / ação).
+digraph gbn_receptor {
+  rankdir=TB; nodesep=0.7; ranksep=0.8; pad=0.5;
+  label="FSM do receptor Go-Back-N"; labelloc=t; fontsize=15;
+  fontname="Helvetica";
+  node [fontname="Helvetica", fontsize=11, shape=ellipse, style=filled, fillcolor="#fbf0ee"];
+  edge [fontname="Helvetica", fontsize=9];
+
+  ini [shape=point, width=0.15, fillcolor="black", label=""];
+  rx  [label="Espera\npacote esperado\n(esperado = 0)"];
+  fim [label="Concluído", shape=doublecircle, fillcolor="#e6f4ea"];
+
+  node [shape=box, style="rounded,filled", fillcolor="#fff8e1", fontsize=10];
+  t_ok      [label="evento: íntegro, seq == esperado, com dados\nação: entrega dados ; ACK seq ; esperado++"];
+  t_descarta [label="evento: corrompido, fora de ordem ou duplicado\nação: descarta ;\nreenvia ACK do último pacote em ordem"];
+  t_fim     [label="evento: íntegro, seq == esperado, sem dados (FIM)\nação: ACK seq ; encerra após o linger"];
+
+  ini -> rx;
+  rx -> t_ok -> rx;
+  rx -> t_descarta -> rx;
+  rx -> t_fim -> fim;
+}

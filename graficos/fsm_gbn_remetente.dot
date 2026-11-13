@@ -1,0 +1,34 @@
+// FSM do remetente Go-Back-N. Gerar a imagem com:
+//   dot -Tpng -Gdpi=150 graficos/fsm_gbn_remetente.dot -o graficos/fsm_gbn_remetente.png
+// Estados = elipses azuis; cada transição = caixa amarela (evento / ação).
+digraph gbn_remetente {
+  rankdir=TB; nodesep=0.7; ranksep=0.8; pad=0.5;
+  label="FSM do remetente Go-Back-N (janela de tamanho N)"; labelloc=t; fontsize=15;
+  fontname="Helvetica";
+  node [fontname="Helvetica", fontsize=11, shape=ellipse, style=filled, fillcolor="#eef3fb"];
+  edge [fontname="Helvetica", fontsize=9];
+
+  ini [shape=point, width=0.15, fillcolor="black", label=""];
+  vazia [label="Janela vazia\ntemporizador parado\nbase == proximo"];
+  transito [label="Pacotes em trânsito\ntemporizador ligado\nbase < proximo"];
+  fim [label="Concluído", shape=doublecircle, fillcolor="#e6f4ea"];
+
+  // transições (caixas)
+  node [shape=box, style="rounded,filled", fillcolor="#fff8e1", fontsize=10];
+  t_primeiro [label="evento: há dados\nação: make(DADOS, proximo) ; sendto ;\niniciar temporizador ; proximo++"];
+  t_envia    [label="evento: há dados e proximo < base + N\nação: make(DADOS, proximo) ; sendto ; proximo++"];
+  t_ack      [label="evento: ACK íntegro, ack ≥ base (cumulativo)\nação: base = ack + 1 ;\nse base < proximo, reiniciar temporizador"];
+  t_ignora   [label="evento: ACK corrompido ou ack < base\nação: ignora"];
+  t_timeout  [label="evento: timeout (go back N)\nação: reiniciar temporizador ;\nretransmite pacotes base .. proximo - 1"];
+  t_esvazia  [label="evento: ACK íntegro, ack ≥ base e base == proximo\nação: base = ack + 1 ; parar temporizador"];
+  t_fim      [label="evento: ACK do pacote FIM (base > seq_fim)\nação: encerra a transferência"];
+
+  ini -> vazia;
+  vazia -> t_primeiro -> transito;
+  transito -> t_envia -> transito;
+  transito -> t_ack -> transito;
+  transito -> t_ignora -> transito;
+  transito -> t_timeout -> transito;
+  transito -> t_esvazia -> vazia;
+  vazia -> t_fim -> fim;
+}
