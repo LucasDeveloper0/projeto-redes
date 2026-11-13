@@ -1,0 +1,556 @@
+11:40:59.753 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.753 [gbn.rx] FORA DE ORDEM seq=1 (esperado 0) -> descartado, reenvia ACK None
+11:40:59.754 [gbn.rx] FORA DE ORDEM seq=2 (esperado 0) -> descartado, reenvia ACK None
+11:40:59.754 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.755 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.755 [gbn.rx] FORA DE ORDEM seq=6 (esperado 0) -> descartado, reenvia ACK None
+11:40:59.755 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.807 [gbn.tx] TIMEOUT base=0 -> reenvia 0..7
+11:40:59.807 [gbn.tx] RETRANSMISSÃO seq=0
+11:40:59.807 [gbn.tx] RETRANSMISSÃO seq=1
+11:40:59.808 [gbn.tx] RETRANSMISSÃO seq=2
+11:40:59.808 [gbn.tx] RETRANSMISSÃO seq=3
+11:40:59.808 [gbn.tx] RETRANSMISSÃO seq=4
+11:40:59.808 [gbn.tx] RETRANSMISSÃO seq=5
+11:40:59.808 [gbn.tx] RETRANSMISSÃO seq=6
+11:40:59.808 [gbn.tx] RETRANSMISSÃO seq=7
+11:40:59.808 [gbn.rx] FORA DE ORDEM seq=4 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.809 [gbn.rx] FORA DE ORDEM seq=5 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.809 [gbn.rx] FORA DE ORDEM seq=6 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.809 [gbn.rx] FORA DE ORDEM seq=7 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.809 [gbn.rx] FORA DE ORDEM seq=8 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.809 [gbn.tx] ACK 1 duplicado/inesperado (base=2) -> ignorado
+11:40:59.810 [gbn.rx] FORA DE ORDEM seq=9 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.810 [gbn.tx] ACK 1 duplicado/inesperado (base=2) -> ignorado
+11:40:59.810 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.810 [gbn.tx] ACK 1 duplicado/inesperado (base=2) -> ignorado
+11:40:59.810 [gbn.tx] ACK 1 duplicado/inesperado (base=2) -> ignorado
+11:40:59.810 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.869 [gbn.tx] TIMEOUT base=2 -> reenvia 2..9
+11:40:59.869 [gbn.tx] RETRANSMISSÃO seq=2
+11:40:59.869 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.870 [gbn.tx] RETRANSMISSÃO seq=3
+11:40:59.870 [gbn.tx] RETRANSMISSÃO seq=4
+11:40:59.870 [gbn.rx] FORA DE ORDEM seq=3 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.870 [gbn.tx] RETRANSMISSÃO seq=5
+11:40:59.870 [gbn.rx] FORA DE ORDEM seq=4 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.870 [gbn.tx] RETRANSMISSÃO seq=6
+11:40:59.870 [gbn.rx] FORA DE ORDEM seq=5 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.870 [gbn.rx] FORA DE ORDEM seq=6 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.870 [gbn.tx] RETRANSMISSÃO seq=7
+11:40:59.870 [gbn.rx] FORA DE ORDEM seq=7 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.870 [gbn.tx] RETRANSMISSÃO seq=8
+11:40:59.870 [gbn.tx] RETRANSMISSÃO seq=9
+11:40:59.870 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.871 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.871 [gbn.rx] FORA DE ORDEM seq=9 (esperado 2) -> descartado, reenvia ACK 1
+11:40:59.871 [gbn.tx] ACK 1 duplicado/inesperado (base=2) -> ignorado
+11:40:59.871 [gbn.tx] ACK 1 duplicado/inesperado (base=2) -> ignorado
+11:40:59.871 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.871 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.871 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.871 [gbn.tx] ACK 1 duplicado/inesperado (base=2) -> ignorado
+11:40:59.871 [gbn.tx] ACK 1 duplicado/inesperado (base=2) -> ignorado
+11:40:59.931 [gbn.tx] TIMEOUT base=2 -> reenvia 2..9
+11:40:59.931 [gbn.tx] RETRANSMISSÃO seq=2
+11:40:59.931 [gbn.tx] RETRANSMISSÃO seq=3
+11:40:59.931 [gbn.tx] RETRANSMISSÃO seq=4
+11:40:59.932 [gbn.tx] RETRANSMISSÃO seq=5
+11:40:59.932 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.932 [gbn.rx] FORA DE ORDEM seq=6 (esperado 5) -> descartado, reenvia ACK 4
+11:40:59.932 [gbn.tx] RETRANSMISSÃO seq=6
+11:40:59.932 [gbn.tx] RETRANSMISSÃO seq=7
+11:40:59.932 [gbn.rx] FORA DE ORDEM seq=7 (esperado 5) -> descartado, reenvia ACK 4
+11:40:59.933 [gbn.tx] RETRANSMISSÃO seq=8
+11:40:59.933 [gbn.rx] FORA DE ORDEM seq=8 (esperado 5) -> descartado, reenvia ACK 4
+11:40:59.933 [gbn.tx] RETRANSMISSÃO seq=9
+11:40:59.933 [gbn.rx] FORA DE ORDEM seq=9 (esperado 5) -> descartado, reenvia ACK 4
+11:40:59.934 [gbn.tx] ACK 4 duplicado/inesperado (base=5) -> ignorado
+11:40:59.934 [gbn.tx] ACK 4 duplicado/inesperado (base=5) -> ignorado
+11:40:59.934 [gbn.tx] ACK 4 duplicado/inesperado (base=5) -> ignorado
+11:40:59.934 [gbn.tx] ACK 4 duplicado/inesperado (base=5) -> ignorado
+11:40:59.934 [gbn.rx] FORA DE ORDEM seq=10 (esperado 5) -> descartado, reenvia ACK 4
+11:40:59.934 [gbn.rx] FORA DE ORDEM seq=11 (esperado 5) -> descartado, reenvia ACK 4
+11:40:59.935 [gbn.rx] FORA DE ORDEM seq=12 (esperado 5) -> descartado, reenvia ACK 4
+11:40:59.935 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.935 [gbn.tx] ACK 4 duplicado/inesperado (base=5) -> ignorado
+11:40:59.935 [gbn.tx] ACK 4 duplicado/inesperado (base=5) -> ignorado
+11:40:59.992 [gbn.tx] TIMEOUT base=5 -> reenvia 5..12
+11:40:59.992 [gbn.tx] RETRANSMISSÃO seq=5
+11:40:59.993 [gbn.tx] RETRANSMISSÃO seq=6
+11:40:59.993 [gbn.tx] RETRANSMISSÃO seq=7
+11:40:59.993 [gbn.tx] RETRANSMISSÃO seq=8
+11:40:59.993 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:40:59.993 [gbn.tx] RETRANSMISSÃO seq=9
+11:40:59.994 [gbn.tx] RETRANSMISSÃO seq=10
+11:40:59.994 [gbn.rx] FORA DE ORDEM seq=8 (esperado 7) -> descartado, reenvia ACK 6
+11:40:59.994 [gbn.tx] RETRANSMISSÃO seq=11
+11:40:59.994 [gbn.tx] RETRANSMISSÃO seq=12
+11:40:59.994 [gbn.rx] FORA DE ORDEM seq=9 (esperado 7) -> descartado, reenvia ACK 6
+11:40:59.995 [gbn.rx] FORA DE ORDEM seq=10 (esperado 7) -> descartado, reenvia ACK 6
+11:40:59.995 [gbn.rx] FORA DE ORDEM seq=11 (esperado 7) -> descartado, reenvia ACK 6
+11:40:59.995 [gbn.tx] ACK 6 duplicado/inesperado (base=7) -> ignorado
+11:40:59.995 [gbn.tx] ACK 6 duplicado/inesperado (base=7) -> ignorado
+11:40:59.995 [gbn.tx] ACK 6 duplicado/inesperado (base=7) -> ignorado
+11:40:59.995 [gbn.tx] ACK 6 duplicado/inesperado (base=7) -> ignorado
+11:40:59.995 [gbn.tx] ACK 6 duplicado/inesperado (base=7) -> ignorado
+11:40:59.996 [gbn.rx] FORA DE ORDEM seq=12 (esperado 7) -> descartado, reenvia ACK 6
+11:40:59.996 [gbn.rx] FORA DE ORDEM seq=13 (esperado 7) -> descartado, reenvia ACK 6
+11:40:59.996 [gbn.rx] FORA DE ORDEM seq=14 (esperado 7) -> descartado, reenvia ACK 6
+11:40:59.996 [gbn.tx] ACK 6 duplicado/inesperado (base=7) -> ignorado
+11:40:59.996 [gbn.tx] ACK 6 duplicado/inesperado (base=7) -> ignorado
+11:41:00.054 [gbn.tx] TIMEOUT base=7 -> reenvia 7..14
+11:41:00.054 [gbn.tx] RETRANSMISSÃO seq=7
+11:41:00.055 [gbn.tx] RETRANSMISSÃO seq=8
+11:41:00.055 [gbn.tx] RETRANSMISSÃO seq=9
+11:41:00.055 [gbn.tx] RETRANSMISSÃO seq=10
+11:41:00.055 [gbn.tx] RETRANSMISSÃO seq=11
+11:41:00.055 [gbn.rx] FORA DE ORDEM seq=10 (esperado 9) -> descartado, reenvia ACK 8
+11:41:00.056 [gbn.tx] RETRANSMISSÃO seq=12
+11:41:00.056 [gbn.tx] RETRANSMISSÃO seq=13
+11:41:00.056 [gbn.rx] FORA DE ORDEM seq=11 (esperado 9) -> descartado, reenvia ACK 8
+11:41:00.056 [gbn.tx] RETRANSMISSÃO seq=14
+11:41:00.056 [gbn.tx] ACK 8 duplicado/inesperado (base=9) -> ignorado
+11:41:00.056 [gbn.tx] ACK 8 duplicado/inesperado (base=9) -> ignorado
+11:41:00.057 [gbn.rx] FORA DE ORDEM seq=12 (esperado 9) -> descartado, reenvia ACK 8
+11:41:00.057 [gbn.rx] FORA DE ORDEM seq=13 (esperado 9) -> descartado, reenvia ACK 8
+11:41:00.057 [gbn.rx] FORA DE ORDEM seq=14 (esperado 9) -> descartado, reenvia ACK 8
+11:41:00.057 [gbn.rx] FORA DE ORDEM seq=15 (esperado 9) -> descartado, reenvia ACK 8
+11:41:00.057 [gbn.rx] FORA DE ORDEM seq=16 (esperado 9) -> descartado, reenvia ACK 8
+11:41:00.057 [gbn.tx] ACK 8 duplicado/inesperado (base=9) -> ignorado
+11:41:00.057 [gbn.tx] ACK 8 duplicado/inesperado (base=9) -> ignorado
+11:41:00.058 [gbn.tx] ACK 8 duplicado/inesperado (base=9) -> ignorado
+11:41:00.117 [gbn.tx] TIMEOUT base=9 -> reenvia 9..16
+11:41:00.117 [gbn.tx] RETRANSMISSÃO seq=9
+11:41:00.117 [gbn.tx] RETRANSMISSÃO seq=10
+11:41:00.117 [gbn.tx] RETRANSMISSÃO seq=11
+11:41:00.117 [gbn.tx] RETRANSMISSÃO seq=12
+11:41:00.117 [gbn.tx] RETRANSMISSÃO seq=13
+11:41:00.117 [gbn.tx] RETRANSMISSÃO seq=14
+11:41:00.118 [gbn.tx] RETRANSMISSÃO seq=15
+11:41:00.118 [gbn.rx] FORA DE ORDEM seq=15 (esperado 14) -> descartado, reenvia ACK 13
+11:41:00.118 [gbn.tx] RETRANSMISSÃO seq=16
+11:41:00.118 [gbn.rx] FORA DE ORDEM seq=16 (esperado 14) -> descartado, reenvia ACK 13
+11:41:00.118 [gbn.rx] FORA DE ORDEM seq=17 (esperado 14) -> descartado, reenvia ACK 13
+11:41:00.118 [gbn.rx] FORA DE ORDEM seq=18 (esperado 14) -> descartado, reenvia ACK 13
+11:41:00.118 [gbn.rx] FORA DE ORDEM seq=19 (esperado 14) -> descartado, reenvia ACK 13
+11:41:00.119 [gbn.rx] FORA DE ORDEM seq=20 (esperado 14) -> descartado, reenvia ACK 13
+11:41:00.119 [gbn.tx] ACK 13 duplicado/inesperado (base=14) -> ignorado
+11:41:00.119 [gbn.rx] FORA DE ORDEM seq=21 (esperado 14) -> descartado, reenvia ACK 13
+11:41:00.119 [gbn.tx] ACK 13 duplicado/inesperado (base=14) -> ignorado
+11:41:00.119 [gbn.tx] ACK 13 duplicado/inesperado (base=14) -> ignorado
+11:41:00.119 [gbn.tx] ACK 13 duplicado/inesperado (base=14) -> ignorado
+11:41:00.119 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.180 [gbn.tx] TIMEOUT base=14 -> reenvia 14..21
+11:41:00.180 [gbn.tx] RETRANSMISSÃO seq=14
+11:41:00.180 [gbn.tx] RETRANSMISSÃO seq=15
+11:41:00.181 [gbn.tx] RETRANSMISSÃO seq=16
+11:41:00.181 [gbn.tx] RETRANSMISSÃO seq=17
+11:41:00.181 [gbn.tx] RETRANSMISSÃO seq=18
+11:41:00.181 [gbn.tx] RETRANSMISSÃO seq=19
+11:41:00.181 [gbn.tx] RETRANSMISSÃO seq=20
+11:41:00.181 [gbn.tx] RETRANSMISSÃO seq=21
+11:41:00.182 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.182 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.182 [gbn.rx] FORA DE ORDEM seq=21 (esperado 17) -> descartado, reenvia ACK 16
+11:41:00.182 [gbn.rx] FORA DE ORDEM seq=22 (esperado 17) -> descartado, reenvia ACK 16
+11:41:00.183 [gbn.rx] FORA DE ORDEM seq=23 (esperado 17) -> descartado, reenvia ACK 16
+11:41:00.183 [gbn.tx] ACK 16 duplicado/inesperado (base=17) -> ignorado
+11:41:00.183 [gbn.rx] FORA DE ORDEM seq=24 (esperado 17) -> descartado, reenvia ACK 16
+11:41:00.183 [gbn.tx] ACK 16 duplicado/inesperado (base=17) -> ignorado
+11:41:00.183 [gbn.tx] ACK 16 duplicado/inesperado (base=17) -> ignorado
+11:41:00.184 [gbn.tx] ACK 16 duplicado/inesperado (base=17) -> ignorado
+11:41:00.184 [gbn.tx] ACK 16 duplicado/inesperado (base=17) -> ignorado
+11:41:00.184 [gbn.tx] ACK 16 duplicado/inesperado (base=17) -> ignorado
+11:41:00.242 [gbn.tx] TIMEOUT base=17 -> reenvia 17..24
+11:41:00.242 [gbn.tx] RETRANSMISSÃO seq=17
+11:41:00.242 [gbn.tx] RETRANSMISSÃO seq=18
+11:41:00.242 [gbn.tx] RETRANSMISSÃO seq=19
+11:41:00.242 [gbn.tx] RETRANSMISSÃO seq=20
+11:41:00.242 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.243 [gbn.rx] FORA DE ORDEM seq=19 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.243 [gbn.rx] FORA DE ORDEM seq=20 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.243 [gbn.tx] RETRANSMISSÃO seq=21
+11:41:00.243 [gbn.tx] RETRANSMISSÃO seq=22
+11:41:00.243 [gbn.tx] RETRANSMISSÃO seq=23
+11:41:00.243 [gbn.tx] RETRANSMISSÃO seq=24
+11:41:00.243 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.243 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.243 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.244 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.244 [gbn.rx] FORA DE ORDEM seq=22 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.244 [gbn.rx] FORA DE ORDEM seq=23 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.244 [gbn.rx] FORA DE ORDEM seq=24 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.244 [gbn.rx] FORA DE ORDEM seq=25 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.244 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.245 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.245 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.245 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.245 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.303 [gbn.tx] TIMEOUT base=18 -> reenvia 18..25
+11:41:00.304 [gbn.tx] RETRANSMISSÃO seq=18
+11:41:00.304 [gbn.tx] RETRANSMISSÃO seq=19
+11:41:00.304 [gbn.tx] RETRANSMISSÃO seq=20
+11:41:00.304 [gbn.tx] RETRANSMISSÃO seq=21
+11:41:00.304 [gbn.tx] RETRANSMISSÃO seq=22
+11:41:00.304 [gbn.tx] RETRANSMISSÃO seq=23
+11:41:00.304 [gbn.rx] FORA DE ORDEM seq=19 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.304 [gbn.rx] FORA DE ORDEM seq=21 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.305 [gbn.rx] FORA DE ORDEM seq=24 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.304 [gbn.tx] RETRANSMISSÃO seq=24
+11:41:00.305 [gbn.tx] RETRANSMISSÃO seq=25
+11:41:00.305 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.305 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.305 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.305 [gbn.rx] FORA DE ORDEM seq=25 (esperado 18) -> descartado, reenvia ACK 17
+11:41:00.305 [gbn.tx] ACK 17 duplicado/inesperado (base=18) -> ignorado
+11:41:00.366 [gbn.tx] TIMEOUT base=18 -> reenvia 18..25
+11:41:00.366 [gbn.tx] RETRANSMISSÃO seq=18
+11:41:00.366 [gbn.tx] RETRANSMISSÃO seq=19
+11:41:00.366 [gbn.tx] RETRANSMISSÃO seq=20
+11:41:00.366 [gbn.tx] RETRANSMISSÃO seq=21
+11:41:00.366 [gbn.tx] RETRANSMISSÃO seq=22
+11:41:00.366 [gbn.tx] RETRANSMISSÃO seq=23
+11:41:00.366 [gbn.tx] RETRANSMISSÃO seq=24
+11:41:00.366 [gbn.tx] RETRANSMISSÃO seq=25
+11:41:00.367 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.367 [gbn.rx] FORA DE ORDEM seq=20 (esperado 19) -> descartado, reenvia ACK 18
+11:41:00.367 [gbn.rx] FORA DE ORDEM seq=21 (esperado 19) -> descartado, reenvia ACK 18
+11:41:00.368 [gbn.rx] FORA DE ORDEM seq=22 (esperado 19) -> descartado, reenvia ACK 18
+11:41:00.368 [gbn.rx] FORA DE ORDEM seq=23 (esperado 19) -> descartado, reenvia ACK 18
+11:41:00.368 [gbn.rx] FORA DE ORDEM seq=24 (esperado 19) -> descartado, reenvia ACK 18
+11:41:00.368 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.368 [gbn.tx] ACK 18 duplicado/inesperado (base=19) -> ignorado
+11:41:00.368 [gbn.tx] ACK 18 duplicado/inesperado (base=19) -> ignorado
+11:41:00.368 [gbn.tx] ACK 18 duplicado/inesperado (base=19) -> ignorado
+11:41:00.368 [gbn.tx] ACK 18 duplicado/inesperado (base=19) -> ignorado
+11:41:00.368 [gbn.tx] ACK 18 duplicado/inesperado (base=19) -> ignorado
+11:41:00.428 [gbn.tx] TIMEOUT base=19 -> reenvia 19..26
+11:41:00.429 [gbn.tx] RETRANSMISSÃO seq=19
+11:41:00.429 [gbn.rx] FORA DE ORDEM seq=20 (esperado 19) -> descartado, reenvia ACK 18
+11:41:00.429 [gbn.tx] RETRANSMISSÃO seq=20
+11:41:00.429 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.429 [gbn.tx] RETRANSMISSÃO seq=21
+11:41:00.429 [gbn.tx] RETRANSMISSÃO seq=22
+11:41:00.429 [gbn.tx] RETRANSMISSÃO seq=23
+11:41:00.430 [gbn.tx] RETRANSMISSÃO seq=24
+11:41:00.430 [gbn.rx] FORA DE ORDEM seq=24 (esperado 19) -> descartado, reenvia ACK 18
+11:41:00.430 [gbn.tx] RETRANSMISSÃO seq=25
+11:41:00.430 [gbn.rx] FORA DE ORDEM seq=25 (esperado 19) -> descartado, reenvia ACK 18
+11:41:00.430 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.430 [gbn.tx] RETRANSMISSÃO seq=26
+11:41:00.431 [gbn.tx] ACK 18 duplicado/inesperado (base=19) -> ignorado
+11:41:00.431 [gbn.tx] ACK 18 duplicado/inesperado (base=19) -> ignorado
+11:41:00.431 [gbn.tx] ACK 18 duplicado/inesperado (base=19) -> ignorado
+11:41:00.431 [gbn.tx] ACK 18 duplicado/inesperado (base=19) -> ignorado
+11:41:00.490 [gbn.tx] TIMEOUT base=19 -> reenvia 19..26
+11:41:00.491 [gbn.tx] RETRANSMISSÃO seq=19
+11:41:00.491 [gbn.tx] RETRANSMISSÃO seq=20
+11:41:00.491 [gbn.tx] RETRANSMISSÃO seq=21
+11:41:00.491 [gbn.tx] RETRANSMISSÃO seq=22
+11:41:00.491 [gbn.tx] RETRANSMISSÃO seq=23
+11:41:00.492 [gbn.tx] RETRANSMISSÃO seq=24
+11:41:00.492 [gbn.tx] RETRANSMISSÃO seq=25
+11:41:00.492 [gbn.tx] RETRANSMISSÃO seq=26
+11:41:00.492 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.493 [gbn.rx] FORA DE ORDEM seq=26 (esperado 25) -> descartado, reenvia ACK 24
+11:41:00.493 [gbn.rx] FORA DE ORDEM seq=28 (esperado 25) -> descartado, reenvia ACK 24
+11:41:00.493 [gbn.rx] FORA DE ORDEM seq=29 (esperado 25) -> descartado, reenvia ACK 24
+11:41:00.494 [gbn.tx] ACK 24 duplicado/inesperado (base=25) -> ignorado
+11:41:00.494 [gbn.rx] FORA DE ORDEM seq=31 (esperado 25) -> descartado, reenvia ACK 24
+11:41:00.494 [gbn.rx] FORA DE ORDEM seq=32 (esperado 25) -> descartado, reenvia ACK 24
+11:41:00.494 [gbn.tx] ACK 24 duplicado/inesperado (base=25) -> ignorado
+11:41:00.494 [gbn.tx] ACK 24 duplicado/inesperado (base=25) -> ignorado
+11:41:00.495 [gbn.tx] ACK 24 duplicado/inesperado (base=25) -> ignorado
+11:41:00.495 [gbn.tx] ACK 24 duplicado/inesperado (base=25) -> ignorado
+11:41:00.552 [gbn.tx] TIMEOUT base=25 -> reenvia 25..32
+11:41:00.552 [gbn.tx] RETRANSMISSÃO seq=25
+11:41:00.553 [gbn.tx] RETRANSMISSÃO seq=26
+11:41:00.553 [gbn.tx] RETRANSMISSÃO seq=27
+11:41:00.553 [gbn.tx] RETRANSMISSÃO seq=28
+11:41:00.553 [gbn.tx] RETRANSMISSÃO seq=29
+11:41:00.553 [gbn.tx] RETRANSMISSÃO seq=30
+11:41:00.553 [gbn.tx] RETRANSMISSÃO seq=31
+11:41:00.553 [gbn.tx] RETRANSMISSÃO seq=32
+11:41:00.556 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.556 [gbn.rx] FORA DE ORDEM seq=37 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.556 [gbn.rx] FORA DE ORDEM seq=38 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.556 [gbn.rx] FORA DE ORDEM seq=39 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.557 [gbn.rx] FORA DE ORDEM seq=40 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.557 [gbn.rx] FORA DE ORDEM seq=41 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.558 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.558 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.558 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.558 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.558 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.558 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.614 [gbn.tx] TIMEOUT base=35 -> reenvia 35..42
+11:41:00.615 [gbn.tx] RETRANSMISSÃO seq=35
+11:41:00.615 [gbn.tx] RETRANSMISSÃO seq=36
+11:41:00.615 [gbn.tx] RETRANSMISSÃO seq=37
+11:41:00.615 [gbn.tx] RETRANSMISSÃO seq=38
+11:41:00.615 [gbn.tx] RETRANSMISSÃO seq=39
+11:41:00.615 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.615 [gbn.rx] FORA DE ORDEM seq=36 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.616 [gbn.rx] FORA DE ORDEM seq=37 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.616 [gbn.rx] FORA DE ORDEM seq=38 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.616 [gbn.rx] FORA DE ORDEM seq=39 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.616 [gbn.rx] FORA DE ORDEM seq=40 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.616 [gbn.tx] RETRANSMISSÃO seq=40
+11:41:00.616 [gbn.tx] RETRANSMISSÃO seq=41
+11:41:00.616 [gbn.tx] RETRANSMISSÃO seq=42
+11:41:00.617 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.617 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.617 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.617 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.617 [gbn.rx] FORA DE ORDEM seq=41 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.617 [gbn.rx] FORA DE ORDEM seq=42 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.617 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.617 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.678 [gbn.tx] TIMEOUT base=35 -> reenvia 35..42
+11:41:00.678 [gbn.tx] RETRANSMISSÃO seq=35
+11:41:00.678 [gbn.tx] RETRANSMISSÃO seq=36
+11:41:00.678 [gbn.rx] FORA DE ORDEM seq=36 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.678 [gbn.tx] RETRANSMISSÃO seq=37
+11:41:00.678 [gbn.tx] RETRANSMISSÃO seq=38
+11:41:00.679 [gbn.tx] RETRANSMISSÃO seq=39
+11:41:00.679 [gbn.tx] RETRANSMISSÃO seq=40
+11:41:00.679 [gbn.tx] RETRANSMISSÃO seq=41
+11:41:00.679 [gbn.tx] RETRANSMISSÃO seq=42
+11:41:00.679 [gbn.rx] FORA DE ORDEM seq=37 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.679 [gbn.rx] FORA DE ORDEM seq=38 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.679 [gbn.rx] FORA DE ORDEM seq=39 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.680 [gbn.rx] FORA DE ORDEM seq=40 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.680 [gbn.rx] FORA DE ORDEM seq=41 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.680 [gbn.rx] FORA DE ORDEM seq=42 (esperado 35) -> descartado, reenvia ACK 34
+11:41:00.680 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.680 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.680 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.680 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.680 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.680 [gbn.tx] ACK 34 duplicado/inesperado (base=35) -> ignorado
+11:41:00.741 [gbn.tx] TIMEOUT base=35 -> reenvia 35..42
+11:41:00.741 [gbn.tx] RETRANSMISSÃO seq=35
+11:41:00.742 [gbn.tx] RETRANSMISSÃO seq=36
+11:41:00.742 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.742 [gbn.tx] RETRANSMISSÃO seq=37
+11:41:00.742 [gbn.rx] FORA DE ORDEM seq=37 (esperado 36) -> descartado, reenvia ACK 35
+11:41:00.742 [gbn.rx] FORA DE ORDEM seq=38 (esperado 36) -> descartado, reenvia ACK 35
+11:41:00.742 [gbn.tx] RETRANSMISSÃO seq=38
+11:41:00.743 [gbn.tx] RETRANSMISSÃO seq=39
+11:41:00.743 [gbn.tx] RETRANSMISSÃO seq=40
+11:41:00.743 [gbn.tx] RETRANSMISSÃO seq=41
+11:41:00.743 [gbn.tx] RETRANSMISSÃO seq=42
+11:41:00.743 [gbn.tx] ACK 35 duplicado/inesperado (base=36) -> ignorado
+11:41:00.743 [gbn.tx] ACK 35 duplicado/inesperado (base=36) -> ignorado
+11:41:00.743 [gbn.tx] ACK 35 duplicado/inesperado (base=36) -> ignorado
+11:41:00.743 [gbn.rx] FORA DE ORDEM seq=39 (esperado 36) -> descartado, reenvia ACK 35
+11:41:00.743 [gbn.rx] FORA DE ORDEM seq=40 (esperado 36) -> descartado, reenvia ACK 35
+11:41:00.744 [gbn.rx] FORA DE ORDEM seq=41 (esperado 36) -> descartado, reenvia ACK 35
+11:41:00.744 [gbn.rx] FORA DE ORDEM seq=42 (esperado 36) -> descartado, reenvia ACK 35
+11:41:00.744 [gbn.rx] FORA DE ORDEM seq=43 (esperado 36) -> descartado, reenvia ACK 35
+11:41:00.744 [gbn.tx] ACK 35 duplicado/inesperado (base=36) -> ignorado
+11:41:00.744 [gbn.tx] ACK 35 duplicado/inesperado (base=36) -> ignorado
+11:41:00.744 [gbn.tx] ACK 35 duplicado/inesperado (base=36) -> ignorado
+11:41:00.744 [gbn.tx] ACK 35 duplicado/inesperado (base=36) -> ignorado
+11:41:00.744 [gbn.tx] ACK 35 duplicado/inesperado (base=36) -> ignorado
+11:41:00.802 [gbn.tx] TIMEOUT base=36 -> reenvia 36..43
+11:41:00.803 [gbn.tx] RETRANSMISSÃO seq=36
+11:41:00.803 [gbn.tx] RETRANSMISSÃO seq=37
+11:41:00.803 [gbn.tx] RETRANSMISSÃO seq=38
+11:41:00.804 [gbn.tx] RETRANSMISSÃO seq=39
+11:41:00.804 [gbn.tx] RETRANSMISSÃO seq=40
+11:41:00.804 [gbn.tx] RETRANSMISSÃO seq=41
+11:41:00.804 [gbn.tx] RETRANSMISSÃO seq=42
+11:41:00.804 [gbn.rx] FORA DE ORDEM seq=42 (esperado 41) -> descartado, reenvia ACK 40
+11:41:00.804 [gbn.tx] RETRANSMISSÃO seq=43
+11:41:00.805 [gbn.rx] FORA DE ORDEM seq=43 (esperado 41) -> descartado, reenvia ACK 40
+11:41:00.806 [gbn.rx] FORA DE ORDEM seq=44 (esperado 41) -> descartado, reenvia ACK 40
+11:41:00.806 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.806 [gbn.rx] FORA DE ORDEM seq=46 (esperado 41) -> descartado, reenvia ACK 40
+11:41:00.806 [gbn.tx] ACK 40 duplicado/inesperado (base=41) -> ignorado
+11:41:00.807 [gbn.rx] FORA DE ORDEM seq=47 (esperado 41) -> descartado, reenvia ACK 40
+11:41:00.807 [gbn.rx] FORA DE ORDEM seq=48 (esperado 41) -> descartado, reenvia ACK 40
+11:41:00.864 [gbn.tx] TIMEOUT base=41 -> reenvia 41..48
+11:41:00.864 [gbn.tx] RETRANSMISSÃO seq=41
+11:41:00.865 [gbn.tx] RETRANSMISSÃO seq=42
+11:41:00.865 [gbn.tx] RETRANSMISSÃO seq=43
+11:41:00.865 [gbn.tx] RETRANSMISSÃO seq=44
+11:41:00.865 [gbn.tx] RETRANSMISSÃO seq=45
+11:41:00.865 [gbn.tx] RETRANSMISSÃO seq=46
+11:41:00.866 [gbn.tx] RETRANSMISSÃO seq=47
+11:41:00.866 [gbn.tx] RETRANSMISSÃO seq=48
+11:41:00.866 [gbn.rx] FORA DE ORDEM seq=48 (esperado 47) -> descartado, reenvia ACK 46
+11:41:00.866 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.866 [gbn.rx] FORA DE ORDEM seq=49 (esperado 47) -> descartado, reenvia ACK 46
+11:41:00.866 [gbn.rx] FORA DE ORDEM seq=50 (esperado 47) -> descartado, reenvia ACK 46
+11:41:00.867 [gbn.rx] FORA DE ORDEM seq=51 (esperado 47) -> descartado, reenvia ACK 46
+11:41:00.867 [gbn.rx] FORA DE ORDEM seq=52 (esperado 47) -> descartado, reenvia ACK 46
+11:41:00.867 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.867 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.867 [gbn.rx] FORA DE ORDEM seq=54 (esperado 47) -> descartado, reenvia ACK 46
+11:41:00.867 [gbn.tx] ACK 46 duplicado/inesperado (base=47) -> ignorado
+11:41:00.867 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.867 [gbn.tx] ACK 46 duplicado/inesperado (base=47) -> ignorado
+11:41:00.867 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.926 [gbn.tx] TIMEOUT base=47 -> reenvia 47..54
+11:41:00.927 [gbn.tx] RETRANSMISSÃO seq=47
+11:41:00.927 [gbn.tx] RETRANSMISSÃO seq=48
+11:41:00.927 [gbn.tx] RETRANSMISSÃO seq=49
+11:41:00.927 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.927 [gbn.tx] RETRANSMISSÃO seq=50
+11:41:00.927 [gbn.rx] FORA DE ORDEM seq=49 (esperado 48) -> descartado, reenvia ACK 47
+11:41:00.927 [gbn.tx] RETRANSMISSÃO seq=51
+11:41:00.927 [gbn.rx] FORA DE ORDEM seq=50 (esperado 48) -> descartado, reenvia ACK 47
+11:41:00.927 [gbn.tx] RETRANSMISSÃO seq=52
+11:41:00.928 [gbn.rx] FORA DE ORDEM seq=51 (esperado 48) -> descartado, reenvia ACK 47
+11:41:00.928 [gbn.tx] RETRANSMISSÃO seq=53
+11:41:00.928 [gbn.rx] FORA DE ORDEM seq=52 (esperado 48) -> descartado, reenvia ACK 47
+11:41:00.928 [gbn.tx] RETRANSMISSÃO seq=54
+11:41:00.928 [gbn.rx] FORA DE ORDEM seq=53 (esperado 48) -> descartado, reenvia ACK 47
+11:41:00.928 [gbn.tx] ACK 47 duplicado/inesperado (base=48) -> ignorado
+11:41:00.928 [gbn.rx] FORA DE ORDEM seq=54 (esperado 48) -> descartado, reenvia ACK 47
+11:41:00.928 [gbn.tx] ACK 47 duplicado/inesperado (base=48) -> ignorado
+11:41:00.928 [gbn.rx] FORA DE ORDEM seq=55 (esperado 48) -> descartado, reenvia ACK 47
+11:41:00.928 [gbn.tx] ACK 47 duplicado/inesperado (base=48) -> ignorado
+11:41:00.929 [gbn.tx] ACK 47 duplicado/inesperado (base=48) -> ignorado
+11:41:00.929 [gbn.tx] ACK 47 duplicado/inesperado (base=48) -> ignorado
+11:41:00.929 [gbn.tx] ACK 47 duplicado/inesperado (base=48) -> ignorado
+11:41:00.989 [gbn.tx] TIMEOUT base=48 -> reenvia 48..55
+11:41:00.989 [gbn.tx] RETRANSMISSÃO seq=48
+11:41:00.989 [gbn.tx] RETRANSMISSÃO seq=49
+11:41:00.989 [gbn.tx] RETRANSMISSÃO seq=50
+11:41:00.990 [gbn.tx] RETRANSMISSÃO seq=51
+11:41:00.990 [gbn.tx] RETRANSMISSÃO seq=52
+11:41:00.990 [gbn.tx] RETRANSMISSÃO seq=53
+11:41:00.990 [gbn.tx] RETRANSMISSÃO seq=54
+11:41:00.990 [gbn.tx] RETRANSMISSÃO seq=55
+11:41:00.993 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.994 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:00.995 [gbn.tx] ACK 63 duplicado/inesperado (base=64) -> ignorado
+11:41:00.995 [gbn.rx] FORA DE ORDEM seq=65 (esperado 64) -> descartado, reenvia ACK 63
+11:41:00.995 [gbn.tx] ACK 63 duplicado/inesperado (base=64) -> ignorado
+11:41:00.995 [gbn.rx] FORA DE ORDEM seq=66 (esperado 64) -> descartado, reenvia ACK 63
+11:41:00.996 [gbn.rx] FORA DE ORDEM seq=67 (esperado 64) -> descartado, reenvia ACK 63
+11:41:00.996 [gbn.tx] ACK 63 duplicado/inesperado (base=64) -> ignorado
+11:41:00.996 [gbn.rx] FORA DE ORDEM seq=69 (esperado 64) -> descartado, reenvia ACK 63
+11:41:00.996 [gbn.rx] FORA DE ORDEM seq=70 (esperado 64) -> descartado, reenvia ACK 63
+11:41:00.996 [gbn.tx] ACK 63 duplicado/inesperado (base=64) -> ignorado
+11:41:01.051 [gbn.tx] TIMEOUT base=64 -> reenvia 64..71
+11:41:01.052 [gbn.tx] RETRANSMISSÃO seq=64
+11:41:01.052 [gbn.tx] RETRANSMISSÃO seq=65
+11:41:01.052 [gbn.tx] RETRANSMISSÃO seq=66
+11:41:01.052 [gbn.tx] RETRANSMISSÃO seq=67
+11:41:01.052 [gbn.tx] RETRANSMISSÃO seq=68
+11:41:01.052 [gbn.tx] RETRANSMISSÃO seq=69
+11:41:01.053 [gbn.tx] RETRANSMISSÃO seq=70
+11:41:01.053 [gbn.tx] RETRANSMISSÃO seq=71
+11:41:01.054 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.056 [gbn.rx] FORA DE ORDEM seq=78 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.056 [gbn.rx] FORA DE ORDEM seq=79 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.056 [gbn.rx] FORA DE ORDEM seq=80 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.057 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.057 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.057 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.057 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.057 [gbn.rx] FORA DE ORDEM seq=81 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.058 [gbn.rx] FORA DE ORDEM seq=82 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.058 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.058 [gbn.rx] FORA DE ORDEM seq=83 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.058 [gbn.rx] FORA DE ORDEM seq=84 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.058 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.058 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.058 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.114 [gbn.tx] TIMEOUT base=77 -> reenvia 77..84
+11:41:01.114 [gbn.tx] RETRANSMISSÃO seq=77
+11:41:01.114 [gbn.tx] RETRANSMISSÃO seq=78
+11:41:01.114 [gbn.tx] RETRANSMISSÃO seq=79
+11:41:01.114 [gbn.rx] FORA DE ORDEM seq=78 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.115 [gbn.tx] RETRANSMISSÃO seq=80
+11:41:01.115 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.115 [gbn.tx] RETRANSMISSÃO seq=81
+11:41:01.115 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.115 [gbn.tx] RETRANSMISSÃO seq=82
+11:41:01.115 [gbn.rx] FORA DE ORDEM seq=82 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.115 [gbn.tx] RETRANSMISSÃO seq=83
+11:41:01.115 [gbn.rx] FORA DE ORDEM seq=83 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.115 [gbn.tx] RETRANSMISSÃO seq=84
+11:41:01.115 [gbn.rx] FORA DE ORDEM seq=84 (esperado 77) -> descartado, reenvia ACK 76
+11:41:01.115 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.115 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.115 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.115 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.115 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.115 [gbn.tx] ACK 76 duplicado/inesperado (base=77) -> ignorado
+11:41:01.176 [gbn.tx] TIMEOUT base=77 -> reenvia 77..84
+11:41:01.176 [gbn.tx] RETRANSMISSÃO seq=77
+11:41:01.176 [gbn.tx] RETRANSMISSÃO seq=78
+11:41:01.176 [gbn.tx] RETRANSMISSÃO seq=79
+11:41:01.176 [gbn.tx] RETRANSMISSÃO seq=80
+11:41:01.176 [gbn.tx] RETRANSMISSÃO seq=81
+11:41:01.176 [gbn.tx] RETRANSMISSÃO seq=82
+11:41:01.176 [gbn.tx] RETRANSMISSÃO seq=83
+11:41:01.176 [gbn.tx] RETRANSMISSÃO seq=84
+11:41:01.177 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.177 [gbn.rx] FORA DE ORDEM seq=81 (esperado 80) -> descartado, reenvia ACK 79
+11:41:01.177 [gbn.rx] FORA DE ORDEM seq=83 (esperado 80) -> descartado, reenvia ACK 79
+11:41:01.177 [gbn.rx] FORA DE ORDEM seq=84 (esperado 80) -> descartado, reenvia ACK 79
+11:41:01.178 [gbn.rx] FORA DE ORDEM seq=85 (esperado 80) -> descartado, reenvia ACK 79
+11:41:01.178 [gbn.rx] FORA DE ORDEM seq=86 (esperado 80) -> descartado, reenvia ACK 79
+11:41:01.179 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.179 [gbn.rx] FORA DE ORDEM seq=87 (esperado 80) -> descartado, reenvia ACK 79
+11:41:01.179 [gbn.tx] ACK 79 duplicado/inesperado (base=80) -> ignorado
+11:41:01.179 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.179 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.179 [gbn.tx] ACK 79 duplicado/inesperado (base=80) -> ignorado
+11:41:01.179 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.180 [gbn.tx] ACK 79 duplicado/inesperado (base=80) -> ignorado
+11:41:01.240 [gbn.tx] TIMEOUT base=80 -> reenvia 80..87
+11:41:01.240 [gbn.tx] RETRANSMISSÃO seq=80
+11:41:01.240 [gbn.tx] RETRANSMISSÃO seq=81
+11:41:01.240 [gbn.tx] RETRANSMISSÃO seq=82
+11:41:01.240 [gbn.tx] RETRANSMISSÃO seq=83
+11:41:01.240 [gbn.tx] RETRANSMISSÃO seq=84
+11:41:01.240 [gbn.tx] RETRANSMISSÃO seq=85
+11:41:01.240 [gbn.tx] RETRANSMISSÃO seq=86
+11:41:01.240 [gbn.tx] RETRANSMISSÃO seq=87
+11:41:01.243 [gbn.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.244 [gbn.rx] FORA DE ORDEM seq=92 (esperado 91) -> descartado, reenvia ACK 90
+11:41:01.245 [gbn.tx] ACK 90 duplicado/inesperado (base=91) -> ignorado
+11:41:01.245 [gbn.tx] ACK 90 duplicado/inesperado (base=91) -> ignorado
+11:41:01.245 [gbn.rx] FORA DE ORDEM seq=93 (esperado 91) -> descartado, reenvia ACK 90
+11:41:01.245 [gbn.rx] FORA DE ORDEM seq=94 (esperado 91) -> descartado, reenvia ACK 90
+11:41:01.245 [gbn.rx] FORA DE ORDEM seq=95 (esperado 91) -> descartado, reenvia ACK 90
+11:41:01.245 [gbn.rx] FORA DE ORDEM seq=96 (esperado 91) -> descartado, reenvia ACK 90
+11:41:01.245 [gbn.rx] FORA DE ORDEM seq=97 (esperado 91) -> descartado, reenvia ACK 90
+11:41:01.246 [gbn.rx] FORA DE ORDEM seq=98 (esperado 91) -> descartado, reenvia ACK 90
+11:41:01.246 [gbn.tx] ACK 90 duplicado/inesperado (base=91) -> ignorado
+11:41:01.246 [gbn.tx] ACK 90 duplicado/inesperado (base=91) -> ignorado
+11:41:01.246 [gbn.tx] ACK 90 duplicado/inesperado (base=91) -> ignorado
+11:41:01.302 [gbn.tx] TIMEOUT base=91 -> reenvia 91..98
+11:41:01.302 [gbn.tx] RETRANSMISSÃO seq=91
+11:41:01.303 [gbn.tx] RETRANSMISSÃO seq=92
+11:41:01.303 [gbn.tx] RETRANSMISSÃO seq=93
+11:41:01.303 [gbn.tx] RETRANSMISSÃO seq=94
+11:41:01.303 [gbn.tx] RETRANSMISSÃO seq=95
+11:41:01.303 [gbn.tx] RETRANSMISSÃO seq=96
+11:41:01.303 [gbn.tx] RETRANSMISSÃO seq=97
+11:41:01.303 [gbn.tx] RETRANSMISSÃO seq=98
+11:41:01.304 [gbn.rx] FORA DE ORDEM seq=96 (esperado 95) -> descartado, reenvia ACK 94
+11:41:01.304 [gbn.rx] FORA DE ORDEM seq=97 (esperado 95) -> descartado, reenvia ACK 94
+11:41:01.304 [gbn.rx] FORA DE ORDEM seq=98 (esperado 95) -> descartado, reenvia ACK 94
+11:41:01.304 [gbn.rx] FORA DE ORDEM seq=99 (esperado 95) -> descartado, reenvia ACK 94
+11:41:01.304 [gbn.rx] FORA DE ORDEM seq=100 (esperado 95) -> descartado, reenvia ACK 94
+11:41:01.304 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.304 [gbn.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:01.305 [gbn.tx] ACK 94 duplicado/inesperado (base=95) -> ignorado
+11:41:01.305 [gbn.tx] ACK 94 duplicado/inesperado (base=95) -> ignorado
+11:41:01.305 [gbn.tx] ACK 94 duplicado/inesperado (base=95) -> ignorado
+11:41:01.365 [gbn.tx] TIMEOUT base=95 -> reenvia 95..100
+11:41:01.365 [gbn.tx] RETRANSMISSÃO seq=95
+11:41:01.365 [gbn.tx] RETRANSMISSÃO seq=96
+11:41:01.365 [gbn.tx] RETRANSMISSÃO seq=97
+11:41:01.365 [gbn.tx] RETRANSMISSÃO seq=98
+11:41:01.365 [gbn.tx] RETRANSMISSÃO seq=99
+11:41:01.365 [gbn.tx] RETRANSMISSÃO seq=100
+11:41:01.366 [gbn.rx] FIM recebido (seq=100), ACK enviado

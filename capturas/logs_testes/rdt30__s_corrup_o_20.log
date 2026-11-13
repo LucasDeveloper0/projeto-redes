@@ -1,0 +1,253 @@
+11:41:14.266 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:14.266 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:14.321 [rdt30.tx] TIMEOUT seq=0
+11:41:14.322 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:14.323 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:14.323 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:14.383 [rdt30.tx] TIMEOUT seq=0
+11:41:14.383 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:14.384 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:14.384 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:14.445 [rdt30.tx] TIMEOUT seq=1
+11:41:14.445 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:14.445 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:14.445 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:14.506 [rdt30.tx] TIMEOUT seq=1
+11:41:14.506 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 3)
+11:41:14.506 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:14.507 [rdt30.tx] ACK 0 inesperado (esperado 1) -> ignorado
+11:41:14.567 [rdt30.tx] TIMEOUT seq=1
+11:41:14.567 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 4)
+11:41:14.568 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:14.630 [rdt30.tx] TIMEOUT seq=0
+11:41:14.631 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:14.631 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:14.631 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:14.692 [rdt30.tx] TIMEOUT seq=0
+11:41:14.693 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 3)
+11:41:14.693 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:14.693 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:14.754 [rdt30.tx] TIMEOUT seq=0
+11:41:14.754 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 4)
+11:41:14.755 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:14.755 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:14.755 [rdt30.tx] ACK 0 inesperado (esperado 1) -> ignorado
+11:41:14.815 [rdt30.tx] TIMEOUT seq=1
+11:41:14.816 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:14.817 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:14.877 [rdt30.tx] TIMEOUT seq=1
+11:41:14.877 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:14.877 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:14.878 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:14.878 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:14.939 [rdt30.tx] TIMEOUT seq=0
+11:41:14.939 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:14.941 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:15.000 [rdt30.tx] TIMEOUT seq=0
+11:41:15.001 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:15.001 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:15.001 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:15.062 [rdt30.tx] TIMEOUT seq=0
+11:41:15.062 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 3)
+11:41:15.063 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:15.063 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:15.064 [rdt30.tx] ACK 0 inesperado (esperado 1) -> ignorado
+11:41:15.125 [rdt30.tx] TIMEOUT seq=1
+11:41:15.125 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:15.125 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:15.125 [rdt30.tx] ACK 0 inesperado (esperado 1) -> ignorado
+11:41:15.188 [rdt30.tx] TIMEOUT seq=1
+11:41:15.188 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 3)
+11:41:15.188 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:15.250 [rdt30.tx] TIMEOUT seq=1
+11:41:15.250 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 4)
+11:41:15.250 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:15.251 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:15.312 [rdt30.tx] TIMEOUT seq=0
+11:41:15.312 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:15.313 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:15.313 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:15.376 [rdt30.tx] TIMEOUT seq=0
+11:41:15.376 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:15.376 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:15.376 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:15.376 [rdt30.tx] ACK 0 inesperado (esperado 1) -> ignorado
+11:41:15.437 [rdt30.tx] TIMEOUT seq=1
+11:41:15.437 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:15.438 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:15.499 [rdt30.tx] TIMEOUT seq=1
+11:41:15.500 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 3)
+11:41:15.500 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:15.501 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:15.561 [rdt30.tx] TIMEOUT seq=1
+11:41:15.562 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:15.562 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:15.562 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:15.624 [rdt30.tx] TIMEOUT seq=1
+11:41:15.624 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:15.625 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:15.625 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:15.625 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:15.687 [rdt30.tx] TIMEOUT seq=0
+11:41:15.687 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:15.688 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:15.688 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:15.750 [rdt30.tx] TIMEOUT seq=0
+11:41:15.750 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:15.751 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:15.813 [rdt30.tx] TIMEOUT seq=0
+11:41:15.813 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 3)
+11:41:15.813 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:15.814 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:15.814 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:15.874 [rdt30.tx] TIMEOUT seq=0
+11:41:15.875 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:15.876 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:15.876 [rdt30.tx] ACK 0 inesperado (esperado 1) -> ignorado
+11:41:15.937 [rdt30.tx] TIMEOUT seq=1
+11:41:15.937 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:15.939 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:15.940 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:15.998 [rdt30.tx] TIMEOUT seq=0
+11:41:15.998 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:15.999 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.060 [rdt30.tx] TIMEOUT seq=1
+11:41:16.060 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:16.060 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.060 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.060 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:16.121 [rdt30.tx] TIMEOUT seq=0
+11:41:16.121 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:16.121 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.122 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:16.184 [rdt30.tx] TIMEOUT seq=0
+11:41:16.184 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 3)
+11:41:16.185 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.185 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:16.247 [rdt30.tx] TIMEOUT seq=0
+11:41:16.247 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:16.250 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.250 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:16.308 [rdt30.tx] TIMEOUT seq=0
+11:41:16.308 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:16.309 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.370 [rdt30.tx] TIMEOUT seq=0
+11:41:16.370 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 3)
+11:41:16.370 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:16.370 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.432 [rdt30.tx] TIMEOUT seq=0
+11:41:16.432 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 4)
+11:41:16.433 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:16.433 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.494 [rdt30.tx] TIMEOUT seq=1
+11:41:16.495 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:16.495 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:16.495 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.495 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:16.556 [rdt30.tx] TIMEOUT seq=0
+11:41:16.556 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:16.556 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.617 [rdt30.tx] TIMEOUT seq=1
+11:41:16.618 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:16.618 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.619 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.680 [rdt30.tx] TIMEOUT seq=1
+11:41:16.681 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:16.681 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:16.681 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.744 [rdt30.tx] TIMEOUT seq=1
+11:41:16.744 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 3)
+11:41:16.745 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:16.745 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.807 [rdt30.tx] TIMEOUT seq=0
+11:41:16.807 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:16.807 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:16.808 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.869 [rdt30.tx] TIMEOUT seq=1
+11:41:16.869 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:16.869 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.869 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.931 [rdt30.tx] TIMEOUT seq=1
+11:41:16.931 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 3)
+11:41:16.931 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:16.931 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.931 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:16.993 [rdt30.tx] TIMEOUT seq=0
+11:41:16.993 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:16.993 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:16.993 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:17.055 [rdt30.tx] TIMEOUT seq=0
+11:41:17.055 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 3)
+11:41:17.056 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.117 [rdt30.tx] TIMEOUT seq=0
+11:41:17.117 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 4)
+11:41:17.117 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:17.118 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:17.119 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:17.179 [rdt30.tx] TIMEOUT seq=0
+11:41:17.179 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:17.180 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:17.180 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:17.241 [rdt30.tx] TIMEOUT seq=0
+11:41:17.241 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:17.242 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:17.242 [rdt30.tx] ACK 0 inesperado (esperado 1) -> ignorado
+11:41:17.302 [rdt30.tx] TIMEOUT seq=1
+11:41:17.302 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:17.303 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.364 [rdt30.tx] TIMEOUT seq=1
+11:41:17.365 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:17.365 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:17.365 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.427 [rdt30.tx] TIMEOUT seq=1
+11:41:17.427 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 3)
+11:41:17.427 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:17.427 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.489 [rdt30.tx] TIMEOUT seq=1
+11:41:17.489 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 4)
+11:41:17.490 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:17.491 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.552 [rdt30.tx] TIMEOUT seq=1
+11:41:17.552 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:17.553 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:17.553 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.615 [rdt30.tx] TIMEOUT seq=0
+11:41:17.615 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:17.616 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:17.616 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+11:41:17.616 [rdt30.tx] ACK 0 inesperado (esperado 1) -> ignorado
+11:41:17.677 [rdt30.tx] TIMEOUT seq=1
+11:41:17.677 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:17.677 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.739 [rdt30.tx] TIMEOUT seq=1
+11:41:17.739 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 3)
+11:41:17.739 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:17.739 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.800 [rdt30.tx] TIMEOUT seq=1
+11:41:17.800 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 4)
+11:41:17.801 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:17.801 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.862 [rdt30.tx] TIMEOUT seq=0
+11:41:17.862 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:17.862 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+11:41:17.863 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:17.863 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.924 [rdt30.tx] TIMEOUT seq=0
+11:41:17.924 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:17.925 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:17.986 [rdt30.tx] TIMEOUT seq=1
+11:41:17.986 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:17.986 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:17.987 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:17.987 [rdt30.tx] ACK 1 inesperado (esperado 0) -> ignorado
+11:41:18.048 [rdt30.tx] TIMEOUT seq=0
+11:41:18.049 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:18.049 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 1
+11:41:18.049 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:18.111 [rdt30.tx] TIMEOUT seq=0
+11:41:18.111 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 3)
+11:41:18.113 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+11:41:18.174 [rdt30.tx] TIMEOUT seq=1
+11:41:18.174 [rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:18.174 [rdt30.rx] DUPLICADO seq=1 (esperado 0) -> descartado, reenvia ACK 1
+11:41:18.174 [rdt30.rx] FIM recebido (seq=0), ACK enviado

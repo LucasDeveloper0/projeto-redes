@@ -1,0 +1,106 @@
+11:41:18.838 [sr.rx] FORA DE ORDEM seq=7 (rcv_base=6) -> guardado no buffer, ACK 7
+11:41:18.888 [sr.tx] TIMEOUT seq=0
+11:41:18.888 [sr.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:18.888 [sr.tx] TIMEOUT seq=6
+11:41:18.888 [sr.tx] RETRANSMISSÃO seq=6 (tentativa 2)
+11:41:18.888 [sr.rx] DUPLICADO seq=0 (rcv_base=6) -> DESCARTA, reenvia ACK 0
+11:41:18.889 [sr.rx] FORA DE ORDEM seq=9 (rcv_base=8) -> guardado no buffer, ACK 9
+11:41:18.889 [sr.rx] FORA DE ORDEM seq=10 (rcv_base=8) -> guardado no buffer, ACK 10
+11:41:18.890 [sr.rx] FORA DE ORDEM seq=11 (rcv_base=8) -> guardado no buffer, ACK 11
+11:41:18.891 [sr.rx] FORA DE ORDEM seq=14 (rcv_base=8) -> guardado no buffer, ACK 14
+11:41:18.891 [sr.rx] FORA DE ORDEM seq=15 (rcv_base=8) -> guardado no buffer, ACK 15
+11:41:18.951 [sr.tx] TIMEOUT seq=8
+11:41:18.951 [sr.tx] RETRANSMISSÃO seq=8 (tentativa 2)
+11:41:18.951 [sr.tx] TIMEOUT seq=10
+11:41:18.951 [sr.tx] RETRANSMISSÃO seq=10 (tentativa 2)
+11:41:18.951 [sr.tx] TIMEOUT seq=12
+11:41:18.952 [sr.rx] DUPLICADO seq=10 (rcv_base=12) -> DESCARTA, reenvia ACK 10
+11:41:18.952 [sr.tx] RETRANSMISSÃO seq=12 (tentativa 2)
+11:41:18.952 [sr.tx] TIMEOUT seq=13
+11:41:18.952 [sr.tx] RETRANSMISSÃO seq=13 (tentativa 2)
+11:41:19.012 [sr.tx] TIMEOUT seq=10
+11:41:19.012 [sr.tx] RETRANSMISSÃO seq=10 (tentativa 3)
+11:41:19.074 [sr.tx] TIMEOUT seq=10
+11:41:19.074 [sr.tx] RETRANSMISSÃO seq=10 (tentativa 4)
+11:41:19.075 [sr.rx] DUPLICADO seq=10 (rcv_base=18) -> DESCARTA, reenvia ACK 10
+11:41:19.136 [sr.tx] TIMEOUT seq=18
+11:41:19.136 [sr.tx] RETRANSMISSÃO seq=18 (tentativa 2)
+11:41:19.136 [sr.rx] DUPLICADO seq=18 (rcv_base=26) -> DESCARTA, reenvia ACK 18
+11:41:19.137 [sr.rx] FORA DE ORDEM seq=28 (rcv_base=27) -> guardado no buffer, ACK 28
+11:41:19.137 [sr.rx] FORA DE ORDEM seq=29 (rcv_base=27) -> guardado no buffer, ACK 29
+11:41:19.137 [sr.rx] FORA DE ORDEM seq=30 (rcv_base=27) -> guardado no buffer, ACK 30
+11:41:19.137 [sr.rx] FORA DE ORDEM seq=31 (rcv_base=27) -> guardado no buffer, ACK 31
+11:41:19.137 [sr.rx] FORA DE ORDEM seq=32 (rcv_base=27) -> guardado no buffer, ACK 32
+11:41:19.138 [sr.rx] FORA DE ORDEM seq=33 (rcv_base=27) -> guardado no buffer, ACK 33
+11:41:19.138 [sr.rx] FORA DE ORDEM seq=34 (rcv_base=27) -> guardado no buffer, ACK 34
+11:41:19.198 [sr.tx] TIMEOUT seq=27
+11:41:19.198 [sr.tx] RETRANSMISSÃO seq=27 (tentativa 2)
+11:41:19.198 [sr.tx] TIMEOUT seq=31
+11:41:19.198 [sr.tx] RETRANSMISSÃO seq=31 (tentativa 2)
+11:41:19.199 [sr.rx] DUPLICADO seq=31 (rcv_base=35) -> DESCARTA, reenvia ACK 31
+11:41:19.199 [sr.rx] FORA DE ORDEM seq=38 (rcv_base=36) -> guardado no buffer, ACK 38
+11:41:19.261 [sr.tx] TIMEOUT seq=31
+11:41:19.261 [sr.tx] RETRANSMISSÃO seq=31 (tentativa 3)
+11:41:19.261 [sr.tx] TIMEOUT seq=35
+11:41:19.261 [sr.tx] RETRANSMISSÃO seq=35 (tentativa 2)
+11:41:19.261 [sr.tx] TIMEOUT seq=36
+11:41:19.261 [sr.tx] RETRANSMISSÃO seq=36 (tentativa 2)
+11:41:19.261 [sr.tx] TIMEOUT seq=37
+11:41:19.261 [sr.tx] RETRANSMISSÃO seq=37 (tentativa 2)
+11:41:19.261 [sr.rx] DUPLICADO seq=31 (rcv_base=36) -> DESCARTA, reenvia ACK 31
+11:41:19.323 [sr.tx] TIMEOUT seq=35
+11:41:19.323 [sr.tx] RETRANSMISSÃO seq=35 (tentativa 3)
+11:41:19.323 [sr.rx] DUPLICADO seq=35 (rcv_base=43) -> DESCARTA, reenvia ACK 35
+11:41:19.385 [sr.tx] TIMEOUT seq=35
+11:41:19.385 [sr.tx] RETRANSMISSÃO seq=35 (tentativa 4)
+11:41:19.386 [sr.rx] DUPLICADO seq=35 (rcv_base=43) -> DESCARTA, reenvia ACK 35
+11:41:19.389 [sr.rx] FORA DE ORDEM seq=54 (rcv_base=53) -> guardado no buffer, ACK 54
+11:41:19.390 [sr.rx] FORA DE ORDEM seq=56 (rcv_base=53) -> guardado no buffer, ACK 56
+11:41:19.390 [sr.rx] FORA DE ORDEM seq=57 (rcv_base=53) -> guardado no buffer, ACK 57
+11:41:19.391 [sr.rx] FORA DE ORDEM seq=58 (rcv_base=53) -> guardado no buffer, ACK 58
+11:41:19.391 [sr.rx] FORA DE ORDEM seq=59 (rcv_base=53) -> guardado no buffer, ACK 59
+11:41:19.391 [sr.rx] FORA DE ORDEM seq=60 (rcv_base=53) -> guardado no buffer, ACK 60
+11:41:19.449 [sr.tx] TIMEOUT seq=53
+11:41:19.449 [sr.tx] RETRANSMISSÃO seq=53 (tentativa 2)
+11:41:19.449 [sr.tx] TIMEOUT seq=55
+11:41:19.449 [sr.tx] RETRANSMISSÃO seq=55 (tentativa 2)
+11:41:19.449 [sr.tx] TIMEOUT seq=56
+11:41:19.450 [sr.tx] RETRANSMISSÃO seq=56 (tentativa 2)
+11:41:19.450 [sr.tx] TIMEOUT seq=57
+11:41:19.450 [sr.tx] RETRANSMISSÃO seq=57 (tentativa 2)
+11:41:19.450 [sr.rx] DUPLICADO seq=56 (rcv_base=61) -> DESCARTA, reenvia ACK 56
+11:41:19.451 [sr.rx] DUPLICADO seq=57 (rcv_base=61) -> DESCARTA, reenvia ACK 57
+11:41:19.453 [sr.rx] FORA DE ORDEM seq=68 (rcv_base=67) -> guardado no buffer, ACK 68
+11:41:19.453 [sr.rx] FORA DE ORDEM seq=69 (rcv_base=67) -> guardado no buffer, ACK 69
+11:41:19.453 [sr.rx] FORA DE ORDEM seq=70 (rcv_base=67) -> guardado no buffer, ACK 70
+11:41:19.454 [sr.rx] FORA DE ORDEM seq=71 (rcv_base=67) -> guardado no buffer, ACK 71
+11:41:19.454 [sr.rx] FORA DE ORDEM seq=72 (rcv_base=67) -> guardado no buffer, ACK 72
+11:41:19.455 [sr.rx] FORA DE ORDEM seq=74 (rcv_base=67) -> guardado no buffer, ACK 74
+11:41:19.510 [sr.tx] TIMEOUT seq=67
+11:41:19.510 [sr.tx] RETRANSMISSÃO seq=67 (tentativa 2)
+11:41:19.511 [sr.tx] TIMEOUT seq=70
+11:41:19.511 [sr.tx] RETRANSMISSÃO seq=70 (tentativa 2)
+11:41:19.511 [sr.tx] TIMEOUT seq=73
+11:41:19.511 [sr.tx] RETRANSMISSÃO seq=73 (tentativa 2)
+11:41:19.511 [sr.rx] DUPLICADO seq=70 (rcv_base=73) -> DESCARTA, reenvia ACK 70
+11:41:19.512 [sr.rx] FORA DE ORDEM seq=75 (rcv_base=73) -> guardado no buffer, ACK 75
+11:41:19.512 [sr.rx] FORA DE ORDEM seq=76 (rcv_base=73) -> guardado no buffer, ACK 76
+11:41:19.513 [sr.rx] FORA DE ORDEM seq=77 (rcv_base=73) -> guardado no buffer, ACK 77
+11:41:19.513 [sr.rx] FORA DE ORDEM seq=78 (rcv_base=73) -> guardado no buffer, ACK 78
+11:41:19.513 [sr.rx] FORA DE ORDEM seq=79 (rcv_base=73) -> guardado no buffer, ACK 79
+11:41:19.513 [sr.rx] FORA DE ORDEM seq=80 (rcv_base=73) -> guardado no buffer, ACK 80
+11:41:19.571 [sr.tx] TIMEOUT seq=73
+11:41:19.572 [sr.tx] RETRANSMISSÃO seq=73 (tentativa 3)
+11:41:19.636 [sr.tx] TIMEOUT seq=81
+11:41:19.636 [sr.tx] RETRANSMISSÃO seq=81 (tentativa 2)
+11:41:19.636 [sr.rx] DUPLICADO seq=81 (rcv_base=89) -> DESCARTA, reenvia ACK 81
+11:41:19.637 [sr.rx] FORA DE ORDEM seq=94 (rcv_base=93) -> guardado no buffer, ACK 94
+11:41:19.637 [sr.rx] FORA DE ORDEM seq=95 (rcv_base=93) -> guardado no buffer, ACK 95
+11:41:19.638 [sr.rx] FORA DE ORDEM seq=96 (rcv_base=93) -> guardado no buffer, ACK 96
+11:41:19.638 [sr.rx] FORA DE ORDEM seq=97 (rcv_base=93) -> guardado no buffer, ACK 97
+11:41:19.638 [sr.rx] FORA DE ORDEM seq=98 (rcv_base=93) -> guardado no buffer, ACK 98
+11:41:19.638 [sr.rx] FORA DE ORDEM seq=99 (rcv_base=93) -> guardado no buffer, ACK 99
+11:41:19.638 [sr.rx] FIM recebido (seq=100), ACK enviado
+11:41:19.638 [sr.rx] FORA DE ORDEM seq=100 (rcv_base=93) -> guardado no buffer, ACK 100
+11:41:19.697 [sr.tx] TIMEOUT seq=93
+11:41:19.697 [sr.tx] RETRANSMISSÃO seq=93 (tentativa 2)

@@ -1,0 +1,278 @@
+11:41:21.823 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:21.823 [sr.rx] FORA DE ORDEM seq=1 (rcv_base=0) -> guardado no buffer, ACK 1
+11:41:21.824 [sr.rx] FORA DE ORDEM seq=2 (rcv_base=0) -> guardado no buffer, ACK 2
+11:41:21.824 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:21.824 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:21.825 [sr.rx] FORA DE ORDEM seq=6 (rcv_base=0) -> guardado no buffer, ACK 6
+11:41:21.825 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:21.877 [sr.tx] TIMEOUT seq=0
+11:41:21.878 [sr.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+11:41:21.878 [sr.tx] TIMEOUT seq=1
+11:41:21.878 [sr.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+11:41:21.878 [sr.tx] TIMEOUT seq=3
+11:41:21.878 [sr.tx] RETRANSMISSÃO seq=3 (tentativa 2)
+11:41:21.878 [sr.tx] TIMEOUT seq=4
+11:41:21.878 [sr.rx] DUPLICADO seq=1 (rcv_base=3) -> DESCARTA, reenvia ACK 1
+11:41:21.878 [sr.tx] RETRANSMISSÃO seq=4 (tentativa 2)
+11:41:21.878 [sr.tx] TIMEOUT seq=5
+11:41:21.878 [sr.tx] RETRANSMISSÃO seq=5 (tentativa 2)
+11:41:21.878 [sr.tx] TIMEOUT seq=7
+11:41:21.878 [sr.tx] RETRANSMISSÃO seq=7 (tentativa 2)
+11:41:21.879 [sr.rx] FORA DE ORDEM seq=5 (rcv_base=3) -> guardado no buffer, ACK 5
+11:41:21.879 [sr.rx] FORA DE ORDEM seq=7 (rcv_base=3) -> guardado no buffer, ACK 7
+11:41:21.879 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:21.879 [sr.rx] FORA DE ORDEM seq=8 (rcv_base=3) -> guardado no buffer, ACK 8
+11:41:21.879 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:21.939 [sr.tx] TIMEOUT seq=1
+11:41:21.939 [sr.tx] RETRANSMISSÃO seq=1 (tentativa 3)
+11:41:21.939 [sr.tx] TIMEOUT seq=3
+11:41:21.940 [sr.rx] DUPLICADO seq=1 (rcv_base=3) -> DESCARTA, reenvia ACK 1
+11:41:21.940 [sr.tx] RETRANSMISSÃO seq=3 (tentativa 3)
+11:41:21.940 [sr.tx] TIMEOUT seq=4
+11:41:21.940 [sr.tx] RETRANSMISSÃO seq=4 (tentativa 3)
+11:41:21.940 [sr.tx] TIMEOUT seq=8
+11:41:21.940 [sr.tx] RETRANSMISSÃO seq=8 (tentativa 2)
+11:41:21.940 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:21.940 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:22.002 [sr.tx] TIMEOUT seq=1
+11:41:22.002 [sr.tx] RETRANSMISSÃO seq=1 (tentativa 4)
+11:41:22.002 [sr.tx] TIMEOUT seq=8
+11:41:22.002 [sr.tx] RETRANSMISSÃO seq=8 (tentativa 3)
+11:41:22.002 [sr.rx] DUPLICADO seq=1 (rcv_base=9) -> DESCARTA, reenvia ACK 1
+11:41:22.002 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:22.002 [sr.rx] DUPLICADO seq=8 (rcv_base=9) -> DESCARTA, reenvia ACK 8
+11:41:22.002 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:22.063 [sr.tx] TIMEOUT seq=1
+11:41:22.063 [sr.tx] RETRANSMISSÃO seq=1 (tentativa 5)
+11:41:22.063 [sr.tx] TIMEOUT seq=8
+11:41:22.063 [sr.rx] DUPLICADO seq=1 (rcv_base=9) -> DESCARTA, reenvia ACK 1
+11:41:22.063 [sr.tx] RETRANSMISSÃO seq=8 (tentativa 4)
+11:41:22.063 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:22.063 [sr.rx] DUPLICADO seq=8 (rcv_base=9) -> DESCARTA, reenvia ACK 8
+11:41:22.124 [sr.tx] TIMEOUT seq=1
+11:41:22.124 [sr.tx] RETRANSMISSÃO seq=1 (tentativa 6)
+11:41:22.125 [sr.rx] DUPLICADO seq=1 (rcv_base=9) -> DESCARTA, reenvia ACK 1
+11:41:22.126 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:22.127 [sr.rx] FORA DE ORDEM seq=10 (rcv_base=9) -> guardado no buffer, ACK 10
+11:41:22.127 [sr.rx] FORA DE ORDEM seq=11 (rcv_base=9) -> guardado no buffer, ACK 11
+11:41:22.127 [sr.rx] FORA DE ORDEM seq=12 (rcv_base=9) -> guardado no buffer, ACK 12
+11:41:22.127 [sr.rx] FORA DE ORDEM seq=13 (rcv_base=9) -> guardado no buffer, ACK 13
+11:41:22.127 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:22.128 [sr.rx] FORA DE ORDEM seq=15 (rcv_base=9) -> guardado no buffer, ACK 15
+11:41:22.128 [sr.rx] FORA DE ORDEM seq=16 (rcv_base=9) -> guardado no buffer, ACK 16
+11:41:22.186 [sr.tx] TIMEOUT seq=9
+11:41:22.186 [sr.tx] RETRANSMISSÃO seq=9 (tentativa 2)
+11:41:22.186 [sr.tx] TIMEOUT seq=10
+11:41:22.186 [sr.tx] RETRANSMISSÃO seq=10 (tentativa 2)
+11:41:22.187 [sr.rx] DUPLICADO seq=10 (rcv_base=14) -> DESCARTA, reenvia ACK 10
+11:41:22.187 [sr.tx] TIMEOUT seq=14
+11:41:22.187 [sr.tx] RETRANSMISSÃO seq=14 (tentativa 2)
+11:41:22.187 [sr.tx] TIMEOUT seq=16
+11:41:22.187 [sr.tx] RETRANSMISSÃO seq=16 (tentativa 2)
+11:41:22.187 [sr.rx] DUPLICADO seq=16 (rcv_base=17) -> DESCARTA, reenvia ACK 16
+11:41:22.188 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:22.188 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:22.188 [sr.rx] FORA DE ORDEM seq=21 (rcv_base=20) -> guardado no buffer, ACK 21
+11:41:22.248 [sr.tx] TIMEOUT seq=14
+11:41:22.248 [sr.tx] RETRANSMISSÃO seq=14 (tentativa 3)
+11:41:22.248 [sr.tx] TIMEOUT seq=20
+11:41:22.248 [sr.rx] DUPLICADO seq=14 (rcv_base=20) -> DESCARTA, reenvia ACK 14
+11:41:22.249 [sr.tx] RETRANSMISSÃO seq=20 (tentativa 2)
+11:41:22.251 [sr.rx] FORA DE ORDEM seq=29 (rcv_base=28) -> guardado no buffer, ACK 29
+11:41:22.252 [sr.rx] FORA DE ORDEM seq=30 (rcv_base=28) -> guardado no buffer, ACK 30
+11:41:22.252 [sr.rx] FORA DE ORDEM seq=31 (rcv_base=28) -> guardado no buffer, ACK 31
+11:41:22.252 [sr.rx] FORA DE ORDEM seq=32 (rcv_base=28) -> guardado no buffer, ACK 32
+11:41:22.252 [sr.rx] FORA DE ORDEM seq=33 (rcv_base=28) -> guardado no buffer, ACK 33
+11:41:22.309 [sr.tx] TIMEOUT seq=26
+11:41:22.309 [sr.tx] RETRANSMISSÃO seq=26 (tentativa 2)
+11:41:22.309 [sr.tx] TIMEOUT seq=28
+11:41:22.309 [sr.rx] DUPLICADO seq=26 (rcv_base=28) -> DESCARTA, reenvia ACK 26
+11:41:22.309 [sr.tx] RETRANSMISSÃO seq=28 (tentativa 2)
+11:41:22.309 [sr.tx] TIMEOUT seq=33
+11:41:22.310 [sr.tx] RETRANSMISSÃO seq=33 (tentativa 2)
+11:41:22.310 [sr.rx] DUPLICADO seq=33 (rcv_base=34) -> DESCARTA, reenvia ACK 33
+11:41:22.370 [sr.tx] TIMEOUT seq=26
+11:41:22.371 [sr.tx] RETRANSMISSÃO seq=26 (tentativa 3)
+11:41:22.371 [sr.rx] DUPLICADO seq=26 (rcv_base=34) -> DESCARTA, reenvia ACK 26
+11:41:22.372 [sr.rx] FORA DE ORDEM seq=38 (rcv_base=37) -> guardado no buffer, ACK 38
+11:41:22.372 [sr.rx] FORA DE ORDEM seq=39 (rcv_base=37) -> guardado no buffer, ACK 39
+11:41:22.372 [sr.rx] FORA DE ORDEM seq=40 (rcv_base=37) -> guardado no buffer, ACK 40
+11:41:22.372 [sr.rx] FORA DE ORDEM seq=41 (rcv_base=37) -> guardado no buffer, ACK 41
+11:41:22.372 [sr.rx] FORA DE ORDEM seq=42 (rcv_base=37) -> guardado no buffer, ACK 42
+11:41:22.372 [sr.rx] FORA DE ORDEM seq=43 (rcv_base=37) -> guardado no buffer, ACK 43
+11:41:22.432 [sr.tx] TIMEOUT seq=36
+11:41:22.432 [sr.tx] RETRANSMISSÃO seq=36 (tentativa 2)
+11:41:22.432 [sr.tx] TIMEOUT seq=37
+11:41:22.433 [sr.tx] RETRANSMISSÃO seq=37 (tentativa 2)
+11:41:22.433 [sr.rx] DUPLICADO seq=36 (rcv_base=37) -> DESCARTA, reenvia ACK 36
+11:41:22.433 [sr.tx] TIMEOUT seq=40
+11:41:22.433 [sr.tx] RETRANSMISSÃO seq=40 (tentativa 2)
+11:41:22.433 [sr.rx] DUPLICADO seq=40 (rcv_base=44) -> DESCARTA, reenvia ACK 40
+11:41:22.433 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:22.494 [sr.tx] TIMEOUT seq=36
+11:41:22.494 [sr.tx] RETRANSMISSÃO seq=36 (tentativa 3)
+11:41:22.494 [sr.tx] TIMEOUT seq=37
+11:41:22.494 [sr.tx] RETRANSMISSÃO seq=37 (tentativa 3)
+11:41:22.494 [sr.tx] TIMEOUT seq=40
+11:41:22.494 [sr.tx] RETRANSMISSÃO seq=40 (tentativa 3)
+11:41:22.494 [sr.rx] DUPLICADO seq=36 (rcv_base=44) -> DESCARTA, reenvia ACK 36
+11:41:22.495 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:22.495 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:22.556 [sr.tx] TIMEOUT seq=37
+11:41:22.556 [sr.tx] RETRANSMISSÃO seq=37 (tentativa 4)
+11:41:22.556 [sr.tx] TIMEOUT seq=40
+11:41:22.556 [sr.tx] RETRANSMISSÃO seq=40 (tentativa 4)
+11:41:22.556 [sr.tx] TIMEOUT seq=44
+11:41:22.556 [sr.tx] RETRANSMISSÃO seq=44 (tentativa 2)
+11:41:22.556 [sr.rx] DUPLICADO seq=40 (rcv_base=44) -> DESCARTA, reenvia ACK 40
+11:41:22.616 [sr.tx] TIMEOUT seq=37
+11:41:22.617 [sr.tx] RETRANSMISSÃO seq=37 (tentativa 5)
+11:41:22.617 [sr.rx] DUPLICADO seq=37 (rcv_base=45) -> DESCARTA, reenvia ACK 37
+11:41:22.618 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:22.618 [sr.rx] FORA DE ORDEM seq=48 (rcv_base=47) -> guardado no buffer, ACK 48
+11:41:22.618 [sr.rx] FORA DE ORDEM seq=49 (rcv_base=47) -> guardado no buffer, ACK 49
+11:41:22.618 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:22.619 [sr.rx] FORA DE ORDEM seq=51 (rcv_base=47) -> guardado no buffer, ACK 51
+11:41:22.619 [sr.rx] FORA DE ORDEM seq=52 (rcv_base=47) -> guardado no buffer, ACK 52
+11:41:22.619 [sr.rx] FORA DE ORDEM seq=53 (rcv_base=47) -> guardado no buffer, ACK 53
+11:41:22.619 [sr.rx] FORA DE ORDEM seq=54 (rcv_base=47) -> guardado no buffer, ACK 54
+11:41:22.678 [sr.tx] TIMEOUT seq=47
+11:41:22.679 [sr.tx] RETRANSMISSÃO seq=47 (tentativa 2)
+11:41:22.679 [sr.tx] TIMEOUT seq=50
+11:41:22.679 [sr.tx] RETRANSMISSÃO seq=50 (tentativa 2)
+11:41:22.679 [sr.rx] FORA DE ORDEM seq=50 (rcv_base=47) -> guardado no buffer, ACK 50
+11:41:22.679 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:22.740 [sr.tx] TIMEOUT seq=47
+11:41:22.740 [sr.tx] RETRANSMISSÃO seq=47 (tentativa 3)
+11:41:22.740 [sr.tx] TIMEOUT seq=50
+11:41:22.740 [sr.tx] RETRANSMISSÃO seq=50 (tentativa 3)
+11:41:22.741 [sr.rx] DUPLICADO seq=50 (rcv_base=47) -> DESCARTA, reenvia ACK 50
+11:41:22.802 [sr.tx] TIMEOUT seq=47
+11:41:22.802 [sr.tx] RETRANSMISSÃO seq=47 (tentativa 4)
+11:41:22.862 [sr.tx] TIMEOUT seq=47
+11:41:22.863 [sr.tx] RETRANSMISSÃO seq=47 (tentativa 5)
+11:41:22.925 [sr.tx] TIMEOUT seq=47
+11:41:22.925 [sr.tx] RETRANSMISSÃO seq=47 (tentativa 6)
+11:41:22.927 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:22.927 [sr.rx] FORA DE ORDEM seq=58 (rcv_base=57) -> guardado no buffer, ACK 58
+11:41:22.928 [sr.rx] FORA DE ORDEM seq=59 (rcv_base=57) -> guardado no buffer, ACK 59
+11:41:22.928 [sr.rx] FORA DE ORDEM seq=60 (rcv_base=57) -> guardado no buffer, ACK 60
+11:41:22.928 [sr.rx] FORA DE ORDEM seq=61 (rcv_base=57) -> guardado no buffer, ACK 61
+11:41:22.928 [sr.rx] FORA DE ORDEM seq=62 (rcv_base=57) -> guardado no buffer, ACK 62
+11:41:22.928 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:22.988 [sr.tx] TIMEOUT seq=55
+11:41:22.988 [sr.tx] RETRANSMISSÃO seq=55 (tentativa 2)
+11:41:22.988 [sr.tx] TIMEOUT seq=57
+11:41:22.988 [sr.tx] RETRANSMISSÃO seq=57 (tentativa 2)
+11:41:22.988 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:23.048 [sr.tx] TIMEOUT seq=55
+11:41:23.048 [sr.tx] RETRANSMISSÃO seq=55 (tentativa 3)
+11:41:23.048 [sr.tx] TIMEOUT seq=57
+11:41:23.048 [sr.tx] RETRANSMISSÃO seq=57 (tentativa 3)
+11:41:23.110 [sr.tx] TIMEOUT seq=55
+11:41:23.111 [sr.tx] RETRANSMISSÃO seq=55 (tentativa 4)
+11:41:23.111 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:23.173 [sr.tx] TIMEOUT seq=55
+11:41:23.173 [sr.tx] RETRANSMISSÃO seq=55 (tentativa 5)
+11:41:23.235 [sr.tx] TIMEOUT seq=55
+11:41:23.235 [sr.tx] RETRANSMISSÃO seq=55 (tentativa 6)
+11:41:23.297 [sr.tx] TIMEOUT seq=55
+11:41:23.298 [sr.tx] RETRANSMISSÃO seq=55 (tentativa 7)
+11:41:23.298 [sr.rx] DUPLICADO seq=55 (rcv_base=63) -> DESCARTA, reenvia ACK 55
+11:41:23.360 [sr.tx] TIMEOUT seq=55
+11:41:23.360 [sr.tx] RETRANSMISSÃO seq=55 (tentativa 8)
+11:41:23.360 [sr.rx] DUPLICADO seq=55 (rcv_base=63) -> DESCARTA, reenvia ACK 55
+11:41:23.361 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:23.362 [sr.rx] FORA DE ORDEM seq=64 (rcv_base=63) -> guardado no buffer, ACK 64
+11:41:23.362 [sr.rx] FORA DE ORDEM seq=65 (rcv_base=63) -> guardado no buffer, ACK 65
+11:41:23.362 [sr.rx] FORA DE ORDEM seq=66 (rcv_base=63) -> guardado no buffer, ACK 66
+11:41:23.362 [sr.rx] FORA DE ORDEM seq=67 (rcv_base=63) -> guardado no buffer, ACK 67
+11:41:23.363 [sr.rx] FORA DE ORDEM seq=68 (rcv_base=63) -> guardado no buffer, ACK 68
+11:41:23.363 [sr.rx] FORA DE ORDEM seq=69 (rcv_base=63) -> guardado no buffer, ACK 69
+11:41:23.422 [sr.tx] TIMEOUT seq=63
+11:41:23.422 [sr.tx] RETRANSMISSÃO seq=63 (tentativa 2)
+11:41:23.422 [sr.tx] TIMEOUT seq=67
+11:41:23.423 [sr.tx] RETRANSMISSÃO seq=67 (tentativa 2)
+11:41:23.423 [sr.tx] TIMEOUT seq=70
+11:41:23.423 [sr.tx] RETRANSMISSÃO seq=70 (tentativa 2)
+11:41:23.423 [sr.rx] FORA DE ORDEM seq=73 (rcv_base=72) -> guardado no buffer, ACK 73
+11:41:23.423 [sr.rx] FORA DE ORDEM seq=74 (rcv_base=72) -> guardado no buffer, ACK 74
+11:41:23.423 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:23.486 [sr.tx] TIMEOUT seq=67
+11:41:23.486 [sr.tx] RETRANSMISSÃO seq=67 (tentativa 3)
+11:41:23.486 [sr.tx] TIMEOUT seq=70
+11:41:23.486 [sr.rx] DUPLICADO seq=67 (rcv_base=72) -> DESCARTA, reenvia ACK 67
+11:41:23.486 [sr.tx] RETRANSMISSÃO seq=70 (tentativa 3)
+11:41:23.487 [sr.tx] TIMEOUT seq=72
+11:41:23.487 [sr.rx] DUPLICADO seq=70 (rcv_base=72) -> DESCARTA, reenvia ACK 70
+11:41:23.487 [sr.tx] RETRANSMISSÃO seq=72 (tentativa 2)
+11:41:23.487 [sr.tx] TIMEOUT seq=73
+11:41:23.487 [sr.tx] RETRANSMISSÃO seq=73 (tentativa 2)
+11:41:23.488 [sr.rx] DUPLICADO seq=73 (rcv_base=75) -> DESCARTA, reenvia ACK 73
+11:41:23.490 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:23.491 [sr.rx] FORA DE ORDEM seq=83 (rcv_base=81) -> guardado no buffer, ACK 83
+11:41:23.491 [sr.rx] FORA DE ORDEM seq=84 (rcv_base=81) -> guardado no buffer, ACK 84
+11:41:23.491 [sr.rx] FORA DE ORDEM seq=85 (rcv_base=81) -> guardado no buffer, ACK 85
+11:41:23.492 [sr.rx] FORA DE ORDEM seq=86 (rcv_base=81) -> guardado no buffer, ACK 86
+11:41:23.492 [sr.rx] FORA DE ORDEM seq=87 (rcv_base=81) -> guardado no buffer, ACK 87
+11:41:23.492 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:23.548 [sr.tx] TIMEOUT seq=81
+11:41:23.548 [sr.tx] RETRANSMISSÃO seq=81 (tentativa 2)
+11:41:23.548 [sr.tx] TIMEOUT seq=82
+11:41:23.548 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:23.549 [sr.tx] RETRANSMISSÃO seq=82 (tentativa 2)
+11:41:23.549 [sr.tx] TIMEOUT seq=88
+11:41:23.549 [sr.rx] FORA DE ORDEM seq=82 (rcv_base=81) -> guardado no buffer, ACK 82
+11:41:23.549 [sr.tx] RETRANSMISSÃO seq=88 (tentativa 2)
+11:41:23.549 [sr.rx] FORA DE ORDEM seq=88 (rcv_base=81) -> guardado no buffer, ACK 88
+11:41:23.611 [sr.tx] TIMEOUT seq=81
+11:41:23.611 [sr.tx] RETRANSMISSÃO seq=81 (tentativa 3)
+11:41:23.613 [sr.rx] FORA DE ORDEM seq=94 (rcv_base=93) -> guardado no buffer, ACK 94
+11:41:23.613 [sr.rx] FORA DE ORDEM seq=95 (rcv_base=93) -> guardado no buffer, ACK 95
+11:41:23.614 [sr.rx] FORA DE ORDEM seq=96 (rcv_base=93) -> guardado no buffer, ACK 96
+11:41:23.614 [sr.rx] FORA DE ORDEM seq=97 (rcv_base=93) -> guardado no buffer, ACK 97
+11:41:23.614 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:23.614 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:23.672 [sr.tx] TIMEOUT seq=90
+11:41:23.673 [sr.tx] RETRANSMISSÃO seq=90 (tentativa 2)
+11:41:23.673 [sr.tx] TIMEOUT seq=92
+11:41:23.673 [sr.tx] RETRANSMISSÃO seq=92 (tentativa 2)
+11:41:23.673 [sr.tx] TIMEOUT seq=93
+11:41:23.673 [sr.rx] DUPLICADO seq=90 (rcv_base=93) -> DESCARTA, reenvia ACK 90
+11:41:23.673 [sr.tx] RETRANSMISSÃO seq=93 (tentativa 2)
+11:41:23.673 [sr.tx] TIMEOUT seq=96
+11:41:23.673 [sr.rx] DUPLICADO seq=92 (rcv_base=93) -> DESCARTA, reenvia ACK 92
+11:41:23.673 [sr.tx] RETRANSMISSÃO seq=96 (tentativa 2)
+11:41:23.673 [sr.tx] TIMEOUT seq=97
+11:41:23.673 [sr.rx] DUPLICADO seq=96 (rcv_base=98) -> DESCARTA, reenvia ACK 96
+11:41:23.673 [sr.tx] RETRANSMISSÃO seq=97 (tentativa 2)
+11:41:23.674 [sr.rx] DESCARTA pacote corrompido (checksum inválido), sem ACK
+11:41:23.674 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:23.674 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:23.733 [sr.tx] TIMEOUT seq=90
+11:41:23.734 [sr.tx] RETRANSMISSÃO seq=90 (tentativa 3)
+11:41:23.734 [sr.tx] TIMEOUT seq=93
+11:41:23.734 [sr.tx] RETRANSMISSÃO seq=93 (tentativa 3)
+11:41:23.734 [sr.tx] TIMEOUT seq=96
+11:41:23.734 [sr.tx] RETRANSMISSÃO seq=96 (tentativa 3)
+11:41:23.734 [sr.tx] TIMEOUT seq=97
+11:41:23.734 [sr.rx] DUPLICADO seq=90 (rcv_base=98) -> DESCARTA, reenvia ACK 90
+11:41:23.734 [sr.rx] DUPLICADO seq=93 (rcv_base=98) -> DESCARTA, reenvia ACK 93
+11:41:23.734 [sr.tx] RETRANSMISSÃO seq=97 (tentativa 3)
+11:41:23.734 [sr.rx] DUPLICADO seq=96 (rcv_base=98) -> DESCARTA, reenvia ACK 96
+11:41:23.735 [sr.rx] DUPLICADO seq=97 (rcv_base=98) -> DESCARTA, reenvia ACK 97
+11:41:23.735 [sr.rx] FIM recebido (seq=100), ACK enviado
+11:41:23.797 [sr.tx] TIMEOUT seq=93
+11:41:23.797 [sr.tx] RETRANSMISSÃO seq=93 (tentativa 4)
+11:41:23.797 [sr.tx] TIMEOUT seq=98
+11:41:23.797 [sr.tx] RETRANSMISSÃO seq=98 (tentativa 2)
+11:41:23.797 [sr.rx] pacote repetido após o FIM seq=93 -> reenvia ACK 93
+11:41:23.797 [sr.rx] pacote repetido após o FIM seq=98 -> reenvia ACK 98
+11:41:23.797 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:23.797 [sr.tx] DESCARTA ACK corrompido (checksum inválido)
+11:41:23.859 [sr.tx] TIMEOUT seq=93
+11:41:23.859 [sr.tx] RETRANSMISSÃO seq=93 (tentativa 5)
+11:41:23.859 [sr.tx] TIMEOUT seq=98
+11:41:23.860 [sr.rx] pacote repetido após o FIM seq=93 -> reenvia ACK 93
+11:41:23.860 [sr.tx] RETRANSMISSÃO seq=98 (tentativa 3)
+11:41:23.860 [sr.rx] pacote repetido após o FIM seq=98 -> reenvia ACK 98
