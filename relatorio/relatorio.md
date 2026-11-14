@@ -177,12 +177,216 @@ com perda. O número de sequência de 4 bytes evita a volta ao zero nos arquivos
 
 ## 6. Injeção de falhas e testes
 
-> **Responsável:** João Vitor (requisito C)
-> **O que escrever:** o canal que simula a rede não confiável (perda, corrupção por
-> inversão de bits, atraso, semente fixa), os 5 cenários de teste, a tabela de resultados
-> e a sequência detecção, descarte, timeout e retransmissão mostrada nos logs.
-> **Material pronto:** `common/channel.py`, `common/enlace.py`, `testes/test_suite.py`,
-> `capturas/resultados_testes.md`, `capturas/logs_testes/`.
+Rodando na mesma máquina, o UDP quase nunca perde nem corrompe um pacote, então um
+protocolo de transferência confiável não teria o que corrigir. Esta seção descreve o canal que
+**injeta falhas de forma controlada** (requisito C) e a suíte de testes que usa esse canal para
+mostrar que o rdt3.0, o Go-Back-N e a Repetição Seletiva **detectam** o problema e **se
+recuperam** dele, sempre entregando o arquivo idêntico ao original.
+
+### 6.1 O canal que simula a rede não confiável
+
+O canal é a classe `UnreliableSocket` (`common/channel.py`). Ela envolve um socket UDP comum e
+tem a mesma interface (`sendto`, `recvfrom`, `bind`, `settimeout`, `close`), de modo que os
+protocolos a usam no lugar do socket normal, sem nenhuma outra mudança. Ela é criada assim:
+
+```python
+UnreliableSocket(loss=0.1, corrupt=0.05, delay=0.02, seed=42)
+```
+
+| Parâmetro | O que faz |
+| --- | --- |
+| `loss` | probabilidade de **perder** o pacote: o `sendto` finge que enviou, mas o descarta |
+| `corrupt` | probabilidade de **corromper** o pacote, invertendo 1 bit em posição aleatória |
+| `delay` | atraso de propagação, em segundos (padrão 0, sem atraso) |
+| `seed` | semente do gerador aleatório, para o teste ser reproduzível |
+
+A cada `sendto`, o canal conta o pacote, sorteia se ele se perde e, se não se perdeu, sorteia
+se ele é corrompido. A corrupção escolhe ao acaso um byte e um bit do pacote e inverte esse
+bit (`_inverter_bit`), simulando ruído no meio físico. O canal também mantém três contadores
+(`enviados`, `perdidos` e `corrompidos`), que a suíte usa para provar que a falha realmente
+aconteceu.
+
+- **Detecção da corrupção.** Quem detecta o erro é o receptor, não o canal. Todo pacote leva
+  um checksum de 16 bits, calculado sobre o cabeçalho (com o campo do checksum zerado) e os
+  dados (`Packet.make`). Ao receber, `Packet.extract` recalcula o checksum e, se ele não
+  bater, devolve `None`: o pacote é descartado como se nunca tivesse chegado, e a perda passa
+  a ser tratada pelo timeout (ver 6.4).
+- **Semente fixa.** O gerador é `random.Random(seed)`, um por socket. Nos testes, o remetente
+  usa a semente 42 e o receptor a 43, então as mesmas perdas e corrupções acontecem a cada
+  execução e qualquer pessoa reproduz os números deste relatório.
+- **Atraso sem bloquear.** Com `delay > 0`, o pacote vai para uma fila e uma **única thread**
+  o entrega depois de `delay` segundos. O `sendto` volta na hora, então o remetente de janela
+  deslizante continua enviando enquanto os pacotes estão "em trânsito", e a ordem de envio é
+  preservada. A primeira versão usava `time.sleep` dentro do `sendto`, o que travava o envio
+  de toda a janela no GBN e na SR e distorceria a medida de utilização do canal.
+- **Relação com o `EnlaceSocket`.** O Lucas criou `common/enlace.py`, que herda de
+  `UnreliableSocket` e acrescenta taxa de transmissão e atraso próprios. Ele é usado só nos
+  experimentos de utilização da seção 5. Os testes desta seção usam o `UnreliableSocket`
+  diretamente.
+
+### 6.2 Cenários e metodologia
+
+A suíte (`testes/test_suite.py`, escrita com `unittest`) roda os **três protocolos em cinco
+cenários**, o que dá 15 testes. A perda e a corrupção valem nos dois sentidos: tanto pacotes
+de dados quanto ACKs podem se perder ou chegar corrompidos.
+
+| Cenário | Perda | Corrupção |
+| --- | --- | --- |
+| sem falhas | 0% | 0% |
+| 10% de perda | 10% | 0% |
+| 20% de perda | 20% | 0% |
+| só corrupção | 0% | 20% |
+| perda com corrupção | 10% | 10% |
+
+Todos os testes usam as mesmas condições: um arquivo pseudoaleatório de 100 KB (semente 42),
+janela N = 8 para o GBN e a SR (o rdt3.0 é pare-e-espera, N = 1), timeout de 50 ms e a
+semente fixa descrita acima. Em cada teste a suíte confere duas coisas:
+
+1. **Entrega confiável:** o SHA-256 do arquivo recebido é igual ao do enviado.
+2. **O mecanismo foi realmente acionado.** Com perda, o canal precisa ter perdido pacotes e o
+   remetente precisa ter retransmitido. Com corrupção, o canal precisa ter corrompido pacotes
+   e o checksum precisa ter detectado alguns. Sem falhas, o número de retransmissões tem de
+   ser zero.
+
+A segunda verificação evita um teste que passa "por sorte": se uma falha não acontecesse, o
+hash seria igual e o teste enganaria. Para rodar, na raiz do projeto:
+
+```bash
+python -m unittest testes.test_suite -v
+```
+
+A execução gera a tabela `capturas/resultados_testes.md` e um log por teste em
+`capturas/logs_testes/`, que são as evidências usadas nas próximas subseções.
+
+### 6.3 Resultados
+
+Os números abaixo vêm de `capturas/resultados_testes.md`. "Perdidos" e "corrompidos" somam o
+que o canal fez com dados e ACKs; "detectados" são os pacotes e ACKs que o checksum rejeitou.
+
+| Protocolo | Cenário | Hash | Tempo (s) | Retransmissões | Perdidos | Corrompidos | Detectados |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| rdt3.0 | sem falhas | OK | 0,02 | 0 | 0 | 0 | 0 |
+| rdt3.0 | 10% de perda | OK | 1,67 | 27 | 27 | 0 | 0 |
+| rdt3.0 | 20% de perda | OK | 3,40 | 55 | 55 | 0 | 0 |
+| rdt3.0 | só corrupção (20%) | OK | 3,91 | 63 | 0 | 75 | 75 |
+| rdt3.0 | perda 10% + corrupção 10% | OK | 4,10 | 66 | 38 | 37 | 37 |
+| GBN | sem falhas | OK | 0,03 | 0 | 0 | 0 | 0 |
+| GBN | 10% de perda | OK | 0,68 | 88 | 35 | 0 | 0 |
+| GBN | 20% de perda | OK | 1,49 | 178 | 95 | 0 | 0 |
+| GBN | só corrupção (20%) | OK | 1,80 | 226 | 0 | 139 | 139 |
+| GBN | perda 10% + corrupção 10% | OK | 1,61 | 206 | 67 | 59 | 59 |
+| SR | sem falhas | OK | 0,03 | 0 | 0 | 0 | 0 |
+| SR | 10% de perda | OK | 0,86 | 27 | 27 | 0 | 0 |
+| SR | 20% de perda | OK | 1,49 | 55 | 55 | 0 | 0 |
+| SR | só corrupção (20%) | OK | 1,49 | 66 | 0 | 66 | 66 |
+| SR | perda 10% + corrupção 10% | OK | 2,04 | 75 | 38 | 37 | 37 |
+
+O que a tabela mostra:
+
+- **Os 15 testes passaram, com hash igual.** Mesmo com 20% de perda ou 20% de corrupção, os
+  três protocolos entregaram o arquivo sem nenhum byte diferente.
+- **Sem falhas não há retransmissão.** Com o canal limpo, as retransmissões e as detecções
+  são zero nos três protocolos, o que confirma que o timeout de 50 ms não dispara à toa.
+- **Toda corrupção foi detectada.** Em todos os cenários com corrupção, o número de pacotes
+  corrompidos é igual ao detectado pelo checksum (por exemplo, 139 de 139 no GBN), então
+  nenhum pacote com erro chegou à aplicação.
+- **Uma perda, uma retransmissão no rdt3.0 e na SR.** Com 10% e 20% de perda, ambos fizeram
+  tantas retransmissões quanto pacotes perdidos (27 e 55), porque só reenviam o que se perdeu.
+- **O GBN retransmite mais.** Com 10% de perda, foram 88 retransmissões para 35 perdas, pois
+  a cada timeout ele reenvia a janela inteira, inclusive pacotes que já tinham chegado.
+- **Os tempos devem ser lidos com cuidado.** São transferências curtas, dependem do timeout
+  de 50 ms e da máquina, e mostram só a ordem de grandeza (o rdt3.0 é o mais lento, porque
+  espera o ACK de cada pacote). A comparação de desempenho, com atraso e taxa de enlace, está
+  na seção 5.
+
+### 6.4 Detecção, descarte, timeout e retransmissão nos logs
+
+Durante cada teste, a suíte liga o log de eventos dos protocolos e o grava em
+`capturas/logs_testes/<protocolo>__<cenário>.log`. Os trechos abaixo foram copiados desses
+arquivos, sem o horário, para mostrar a mesma sequência em cada protocolo: o problema é
+**detectado**, o pacote é **descartado**, o temporizador **estoura** e o remetente
+**retransmite**.
+
+**rdt3.0, ACK perdido** (`rdt30__10_de_perda.log`, linhas 1 a 3):
+
+```
+[rdt30.tx] TIMEOUT seq=0
+[rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+[rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
+```
+
+O receptor já esperava o pacote 1, ou seja, o pacote 0 tinha chegado, e só o ACK dele se
+perdeu. O remetente não sabe disso: sem ACK, o temporizador estoura e ele reenvia o pacote 0.
+O receptor reconhece pelo número de sequência que é uma **cópia** e a descarta, mas reenvia o
+ACK 0. É para isso que serve a numeração 0/1.
+
+**rdt3.0, corrupção** (`rdt30__s_corrup_o_20.log`, linhas 9 a 12):
+
+```
+[rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
+[rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
+[rdt30.tx] TIMEOUT seq=1
+[rdt30.tx] RETRANSMISSÃO seq=1 (tentativa 2)
+```
+
+Aqui a corrupção atinge os dois lados: o receptor detecta um pacote com erro e o descarta, e o
+remetente descarta um ACK que também chegou corrompido. Sem um ACK válido, o único recurso é o
+timeout, seguido da retransmissão do pacote 1.
+
+**Go-Back-N, perda** (`gbn__10_de_perda.log`, linhas 1, 2 e 12, com as linhas intermediárias
+omitidas):
+
+```
+[gbn.rx] FORA DE ORDEM seq=7 (esperado 6) -> descartado, reenvia ACK 5
+[gbn.tx] ACK 5 duplicado/inesperado (base=6) -> ignorado
+...
+[gbn.tx] TIMEOUT base=6 -> reenvia 6..13
+```
+
+O pacote 6 se perdeu. O receptor do GBN não guarda nada fora de ordem: descarta cada pacote
+seguinte (7, 8, 9...) e repete o ACK 5, o último em ordem. O remetente ignora esses ACKs
+repetidos. Quando o timeout de `base` estoura, ele **volta N** e reenvia toda a janela, de 6 a
+13, uma `RETRANSMISSÃO` por pacote. É a origem das 88 retransmissões para 35 perdas.
+
+**Repetição Seletiva, perda** (`sr__10_de_perda.log`, linhas 2 a 6):
+
+```
+[sr.tx] TIMEOUT seq=0
+[sr.tx] RETRANSMISSÃO seq=0 (tentativa 2)
+[sr.tx] TIMEOUT seq=6
+[sr.tx] RETRANSMISSÃO seq=6 (tentativa 2)
+[sr.rx] DUPLICADO seq=0 (rcv_base=6) -> DESCARTA, reenvia ACK 0
+```
+
+Na SR cada pacote tem o seu temporizador, então só os pacotes 0 e 6 são reenviados, e os que
+chegaram fora de ordem ficam guardados no buffer do receptor (`FORA DE ORDEM ... guardado no
+buffer`). O pacote 0 já tinha sido recebido (só o ACK se perdeu), por isso o receptor o
+descarta como duplicado e confirma de novo.
+
+A tabela abaixo liga cada mensagem dos logs ao conceito visto em aula:
+
+| Mensagem no log | Conceito |
+| --- | --- |
+| `PACOTE CORROMPIDO` / `ACK CORROMPIDO detectado pelo checksum` | detecção de erro por checksum |
+| `descartado` / `DESCARTA` | o pacote com erro, duplicado ou fora de ordem não é entregue |
+| `TIMEOUT` | o temporizador estoura quando o ACK não chega (perda de dado ou de ACK) |
+| `RETRANSMISSÃO` | reenvio do pacote não confirmado (ARQ) |
+| `DUPLICADO` | o número de sequência identifica a cópia de um pacote já entregue |
+| `FORA DE ORDEM` | GBN descarta; SR guarda no buffer |
+
+### 6.5 Limitações
+
+- **Uma execução por cenário.** A semente fixa dá reprodutibilidade, mas cada cenário é uma
+  única sequência de sorteios. Os tempos mudariam com outras sementes e com a carga da
+  máquina; a contagem de pacotes corrompidos e detectados é mais estável.
+- **Corrupção de 1 bit.** O canal inverte um bit por pacote. O checksum de 16 bits detecta
+  esse caso, mas corrupções de vários bits poderiam, em tese, escapar de um checksum tão
+  curto, e esse cenário não foi testado.
+- **Só perda e corrupção.** O canal não reordena nem duplica pacotes por conta própria. A
+  ordem só se altera quando uma perda força uma retransmissão.
+- **Parâmetros da suíte.** A suíte usa timeout de 50 ms e atraso zero. Os atrasos e a taxa de
+  enlace aparecem só nos experimentos da seção 5. A linha de comando dos protocolos usa
+  timeout padrão de 0,1 s.
 
 ## 7. Análise de uma conexão TCP real
 
