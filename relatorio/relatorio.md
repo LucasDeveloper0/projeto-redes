@@ -21,14 +21,174 @@
 > pacotes), os objetivos do trabalho, as ferramentas usadas (Python, UDP, Wireshark,
 > Mininet) e um resumo de como o relatório está organizado.
 
+
 ## 2. rdt3.0: pare-e-espera sobre UDP
 
-> **Responsável:** Lucas (requisito A)
-> **O que escrever:** o formato do pacote (tipo, número de sequência, ACK, checksum,
-> tamanho), o funcionamento do rdt3.0 (sequência 0/1, ACK, temporizador, retransmissão),
-> a FSM e a validação com SHA-256.
-> **Material pronto:** `relatorio/fsm_rdt30.md`, `graficos/fsm_rdt30_remetente.png`,
-> `graficos/fsm_rdt30_receptor.png`, `common/packet.py`, `rdt30/`.
+O UDP entrega pacotes sem nenhuma garantia: um pacote pode se perder, chegar com bits trocados
+ou nem chegar. O rdt3.0 (Kurose e Ross) é o protocolo mais simples que corrige isso sobre um
+canal que **perde e corrompe**: ele numera os pacotes, confirma cada um com um ACK, detecta
+erros com um checksum e reenvia o que não foi confirmado a tempo. Esta seção descreve o
+formato do pacote usado por todo o trabalho, o funcionamento do rdt3.0, a sua máquina de
+estados (FSM) e a validação com SHA-256 (requisito A).
+
+### 2.1 Formato do pacote
+
+Todos os protocolos do grupo (rdt3.0, GBN e SR) usam o mesmo pacote, definido na classe
+`Packet` (`common/packet.py`). Ele tem um cabeçalho fixo de **13 bytes**, seguido dos dados:
+
+| Campo | Tamanho | Função |
+| --- | --- | --- |
+| tipo | 1 byte | `0` = DADOS, `1` = ACK |
+| número de sequência | 4 bytes | numera o pacote de dados (no rdt3.0, só 0 e 1) |
+| número de ACK | 4 bytes | em um ACK, o número do pacote confirmado |
+| checksum | 2 bytes | detecta bits trocados (soma de 16 bits em complemento de um) |
+| tamanho | 2 bytes | quantidade de bytes de dados que seguem o cabeçalho |
+| dados | 0 a 1024 bytes | pedaço do arquivo (vazio no ACK e no pacote FIM) |
+
+O cabeçalho é montado com `struct` no formato `"!BIIHH"`: o `!` fixa a ordem de bytes da rede
+(*big-endian*) e as letras são os tamanhos de cada campo (`B` = 1 byte, `I` = 4, `H` = 2).
+
+- **Checksum.** É o mesmo cálculo do checksum da Internet usado no UDP e no TCP: soma de
+  palavras de 16 bits, com o "vai-um" reincorporado à soma, e complemento de um no final. Ele é
+  calculado sobre o cabeçalho (com o campo do checksum zerado) e os dados. O receptor refaz a
+  conta; se o resultado diferir do campo, o pacote foi corrompido.
+- **Descarte automático.** `Packet.extract()` devolve `None` quando o pacote é menor que o
+  cabeçalho, quando o campo de tamanho não bate com os bytes recebidos ou quando o checksum não
+  confere. Nos três casos o protocolo trata o pacote como se nunca tivesse chegado, e a
+  recuperação fica por conta do temporizador.
+- **Detecção de 1 bit.** Trocar um único bit sempre altera a soma, então o checksum detecta
+  toda corrupção de 1 bit, que é o que o canal do grupo injeta (seção 6). Corrupções de
+  vários bits poderiam, em tese, escapar de um checksum de 16 bits.
+- **ACK.** É um pacote do tipo ACK, sem dados, com o número confirmado no campo de ACK
+  (`Packet.make(ACK, 0, ack)`); ocupa só os 13 bytes do cabeçalho.
+- **Fim do arquivo.** É um pacote DADOS com **0 byte de dados**, que passa pelo mesmo
+  mecanismo de ACK e retransmissão dos demais. Um arquivo de 100 KB vira 101 pacotes: 100 de
+  1024 bytes e o FIM.
+
+### 2.2 Funcionamento
+
+O rdt3.0 é do tipo **pare-e-espera**: há no máximo um pacote em trânsito. O remetente só envia
+o próximo depois de receber o ACK do atual.
+
+- **Número de sequência de 1 bit (0 e 1).** O remetente alterna entre 0 e 1 a cada pacote
+  confirmado (`seq ^= 1`). Como só existe um pacote em trânsito por vez, 1 bit basta para o
+  receptor distinguir um pacote **novo** de uma **cópia** retransmitida.
+- **ACK com número.** O receptor confirma cada pacote correto com um ACK que leva o número
+  recebido. Não há NAK: o rdt3.0 só usa confirmação positiva.
+- **Temporizador.** Ao enviar um pacote, o remetente liga um temporizador (`TIMEOUT_PADRAO` =
+  0,1 s). Se o ACK correto não chega a tempo, ele **retransmite o mesmo pacote** e reinicia o
+  temporizador. Isso cobre tanto a perda do pacote de dados quanto a do ACK.
+- **O que o remetente ignora.** Um ACK corrompido (o checksum falha) ou com número diferente do
+  esperado é ignorado, sem retransmitir na hora: o remetente continua esperando até o
+  temporizador estourar. É a escolha do rdt3.0 do livro, que evita reenviar o pacote
+  desnecessariamente a cada ACK repetido.
+- **O que o receptor faz.** Para cada pacote que chega:
+  - corrompido: é descartado e o receptor reenvia o ACK do último pacote entregue;
+  - íntegro, mas com número diferente do esperado (uma cópia): é descartado, **mas o ACK é
+    reenviado**, porque o remetente só repete o pacote se o ACK anterior se perdeu;
+  - íntegro e esperado: os dados são gravados no arquivo, o ACK é enviado e o receptor passa a
+    esperar o outro número (`esperado ^= 1`).
+- **Último ACK perdido.** Depois de confirmar o pacote FIM, o receptor continua respondendo por
+  um tempo (`LINGER_PADRAO` = 1 s). Se o ACK do FIM se perdeu, o remetente reenvia o FIM e
+  ainda encontra o receptor para confirmá-lo.
+
+Esse mecanismo resolve os três problemas do canal, sempre pela mesma via (o temporizador):
+
+| Problema | O que acontece | Como o rdt3.0 se recupera |
+| --- | --- | --- |
+| Pacote de dados perdido | o receptor não vê nada e não envia ACK | timeout e retransmissão |
+| ACK perdido | o receptor já entregou o pacote, mas o remetente não sabe | timeout e retransmissão; o receptor descarta a cópia (número repetido) e reenvia o ACK |
+| Pacote ou ACK corrompido | o checksum falha e o pacote é descartado | tratado como perda: timeout e retransmissão |
+
+### 2.3 Máquina de estados (FSM)
+
+O remetente tem quatro estados: **espera dados para enviar com seq 0**, **espera ACK 0**,
+**espera dados para enviar com seq 1** e **espera ACK 1**. O receptor tem dois, **espera
+pacote 0** e **espera pacote 1**. Em cada estado de espera de ACK, o estouro do temporizador
+retransmite o pacote, e um ACK corrompido ou de número errado não muda o estado.
+
+![FSM do remetente rdt3.0](../graficos/fsm_rdt30_remetente.png)
+
+![FSM do receptor rdt3.0](../graficos/fsm_rdt30_receptor.png)
+
+A tabela que liga cada elemento da FSM ao conceito da aula e ao trecho do código está em
+`relatorio/fsm_rdt30.md`.
+
+### 2.4 Implementação
+
+A implementação está em `rdt30/remetente.py` e `rdt30/receptor.py`, em Python sobre UDP. Os
+dois recebem o socket como parâmetro, então funcionam tanto com um socket comum quanto com o
+canal não confiável (`UnreliableSocket`, seção 6), sem outra mudança.
+
+- **Remetente.** `enviar_arquivo()` lê o arquivo em pedaços de 1024 bytes e, para cada um,
+  chama `_enviar_e_esperar_ack()`. Essa função envia o pacote, espera até o prazo do
+  temporizador e trata cada evento da FSM: ACK correto (retorna), ACK corrompido ou com número
+  errado (ignora e conta) e timeout (reenvia). Depois de mais de 100 timeouts seguidos no mesmo
+  pacote (`MAX_TENTATIVAS`), levanta `ConnectionError` em vez de esperar para sempre.
+- **Receptor.** `receber_arquivo()` mantém duas variáveis: `esperado` (0 ou 1) e `ultimo_ack`.
+  O `ultimo_ack` começa em 1, que não confirma nada, porque o remetente espera o ACK 0 do
+  primeiro pacote e ignora o 1.
+- **Métricas.** Os dois devolvem um dicionário de estatísticas: o remetente informa tempo total,
+  pacotes enviados, retransmissões, ACKs corrompidos e duplicados e bytes úteis; o receptor,
+  pacotes válidos, corrompidos e duplicados. O SHA-256 do arquivo também é calculado
+  (`common/arquivo.py`).
+- **Log de eventos.** Com `-v`, o protocolo escreve `TIMEOUT`, `RETRANSMISSÃO`, `ACK CORROMPIDO`,
+  `PACOTE CORROMPIDO` e `DUPLICADO`, a sequência usada como evidência na seção 6.4.
+
+O trecho abaixo, do remetente, mostra o fim do arquivo, a numeração 0/1 e a espera pelo ACK:
+
+```python
+with open(caminho, "rb") as f:
+    while True:
+        chunk = f.read(tamanho)
+        # chunk vazio = fim do arquivo: manda o pacote FIM (DADOS sem dados)
+        pacote = Packet.make(DADOS, seq, 0, chunk)
+        _enviar_e_esperar_ack(sock, destino, pacote, seq, timeout, max_tentativas, st)
+        if not chunk:
+            break
+        st["bytes_uteis"] += len(chunk)
+        seq ^= 1  # alterna 0/1
+```
+
+Exemplo de execução, em dois terminais, com 10% de perda nos dois sentidos:
+
+```bash
+python rdt30/receptor.py --porta 5000 --saida recebido.bin --perda 0.1 --seed 43 -v
+python rdt30/remetente.py arquivo.bin --porta 5000 --perda 0.1 --seed 42 -v
+```
+
+### 2.5 Validação com SHA-256
+
+Para provar que a transferência é confiável, o arquivo recebido é comparado com o enviado pelo
+**hash SHA-256**: se um único bit diferir, o hash muda por completo. O `sha256_arquivo()`
+(`common/arquivo.py`) lê o arquivo em blocos e devolve o hash em hexadecimal. A validação roda
+em dois lugares:
+
+- `testes/validar_rdt30.py`, um script próprio do rdt3.0 que roda os cinco cenários de falha e
+  imprime `OK` ou `FALHOU` para cada um;
+- a suíte automatizada `testes/test_suite.py` (seção 6), que repete a conferência para os três
+  protocolos e ainda verifica que as falhas realmente aconteceram.
+
+O rdt3.0 passou nos cinco cenários, sempre com hash igual (arquivo de 100 KB, semente 42,
+timeout de 50 ms; números de `capturas/resultados_testes.md`):
+
+| Cenário | Hash | Tempo (s) | Retransmissões | Perdidos | Corrompidos | Detectados (checksum) |
+| --- | --- | --- | --- | --- | --- | --- |
+| sem falhas | OK | 0,02 | 0 | 0 | 0 | 0 |
+| 10% de perda | OK | 1,67 | 27 | 27 | 0 | 0 |
+| 20% de perda | OK | 3,40 | 55 | 55 | 0 | 0 |
+| só corrupção (20%) | OK | 3,91 | 63 | 0 | 75 | 75 |
+| perda 10% + corrupção 10% | OK | 4,10 | 66 | 38 | 37 | 37 |
+
+- **Sem falhas não há retransmissão**, então o temporizador não dispara à toa.
+- **Com perda, uma retransmissão por pacote perdido** (27 para 27 e 55 para 55): o rdt3.0 só
+  reenvia o que se perdeu.
+- **Toda corrupção foi detectada** (75 de 75 e 37 de 37): nenhum pacote com erro chegou ao
+  arquivo, e o hash final confirma isso.
+- **É o mais lento dos três**, porque espera o ACK de cada pacote. O efeito disso na utilização
+  do canal é o assunto da seção 5.
+
+---
 
 ## 3. Go-Back-N
 
@@ -168,12 +328,131 @@ com perda. O número de sequência de 4 bytes evita a volta ao zero nos arquivos
 
 ## 5. Comparação da utilização do canal
 
-> **Responsável:** Lucas (requisito A e comparação do B)
-> **O que escrever:** como foram feitos os experimentos (mesmo arquivo, mesma perda e
-> mesmo atraso, variando a janela), o gráfico de utilização do canal (pare-e-espera,
-> GBN e SR) e a discussão dos resultados.
-> **Material pronto:** `graficos/grafico_utilizacao.png`, `graficos/utilizacao_resumo.csv`,
-> `testes/experimentos.py`, `graficos/plot_utilizacao.py`.
+O rdt3.0 é correto, mas lento: com um pacote em trânsito por vez, o remetente passa quase
+todo o tempo esperando o ACK. O GBN e a SR resolvem isso com uma **janela** de N pacotes. Esta
+seção mede **quanto do enlace cada protocolo consegue usar**, com o mesmo arquivo, a mesma
+taxa de perda e o mesmo atraso, variando o tamanho da janela (comparação do requisito B).
+
+### 5.1 Como os experimentos foram feitos
+
+O script `testes/experimentos.py` transfere o mesmo arquivo pelos três protocolos, confere o
+SHA-256 de cada transferência e grava uma linha de métricas por execução em
+`graficos/experimentos.jsonl` (formato de `common/metricas.py`). O gráfico sai de
+`graficos/plot_utilizacao.py`.
+
+| Parâmetro | Valor |
+| --- | --- |
+| Arquivo | 100 KB pseudoaleatório (semente 42): 101 pacotes, 100 de dados e o FIM |
+| Pacote | 1024 bytes de dados + 13 de cabeçalho = 1037 bytes |
+| Taxa do enlace | 1 Mbit/s (um pacote leva 8,3 ms para sair) |
+| Atraso de propagação | 20 ms por sentido (RTT de 40 ms) |
+| Perda | 0% e 5%, nos dois sentidos (dados e ACKs) |
+| Janela N | 1, 2, 4, 8, 16 e 32 para o GBN e a SR; o rdt3.0 é sempre N = 1 |
+| Repetições | 3 por ponto (sementes 42, 1042 e 2042) |
+
+- **O enlace simulado.** Os experimentos usam o `EnlaceSocket` (`common/enlace.py`), que herda
+  do `UnreliableSocket` e modela um enlace de verdade: os pacotes saem **um de cada vez** na
+  taxa configurada (os seguintes esperam numa fila) e chegam depois do atraso de propagação. Um
+  pacote perdido ainda ocupa o enlace. O `sendto` não bloqueia, então o remetente continua
+  enviando enquanto os pacotes viajam, e a taxa impede que a utilização passe de 100%.
+- **Timeout proporcional à janela.** O timeout tem de ser maior que o RTT mais o tempo de a
+  janela inteira sair do enlace; senão há retransmissão à toa. Por isso o script usa
+  `timeout = RTT + N x (L/R) + 50 ms`, o que dá de 98 ms (N = 1) a 355 ms (N = 32). A regra é a
+  mesma para os três protocolos.
+- **Utilização.** É a fração do tempo em que o enlace transmitiria dados úteis:
+
+  `U = (bytes úteis x 8 / R) / tempo total`
+
+  Com poucas janelas, o remetente espera o ACK; com janelas maiores, o canal fica ocupado.
+- **Reprodução.** Na raiz do projeto: `python -m testes.experimentos` (cerca de 5 minutos) e
+  `python graficos/plot_utilizacao.py`.
+
+### 5.2 Resultados
+
+![Utilização do canal: pare-e-espera, GBN e SR](../graficos/grafico_utilizacao.png)
+
+*Figura 5.1: utilização do canal em função da janela N, sem perda (esquerda) e com 5% de perda
+(direita). A linha pontilhada é o limite teórico; as barras vão do mínimo ao máximo das 3
+repetições.*
+
+Valores médios (de `graficos/utilizacao_resumo.csv`):
+
+| Janela N | GBN, sem perda | SR, sem perda | GBN, 5% de perda | SR, 5% de perda |
+| --- | --- | --- | --- | --- |
+| 1 | 16,3% | 16,4% | 14,1% | 14,1% |
+| 2 | 32,4% | 32,4% | 25,2% | 24,6% |
+| 4 | 63,8% | 63,8% | 40,0% | 38,0% |
+| 8 | 94,0% | 94,1% | 50,1% | 49,6% |
+| 16 | 94,0% | 94,0% | 49,7% | 58,0% |
+| 32 | 94,0% | 94,0% | 28,9% | 62,3% |
+| rdt3.0 (N = 1) | 16,3% | — | 14,0% | — |
+
+Com 5% de perda, o custo de cada protocolo aparece no número de pacotes retransmitidos:
+
+| Janela N | GBN: retransmissões | SR: retransmissões | GBN: pacotes enviados | SR: pacotes enviados | GBN: tempo (s) | SR: tempo (s) |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1 | 7,7 | 7,7 | 108,7 | 108,7 | 5,82 | 5,82 |
+| 2 | 11,3 | 7,7 | 112,3 | 108,7 | 3,27 | 3,33 |
+| 4 | 20,0 | 7,7 | 121,0 | 108,7 | 2,07 | 2,16 |
+| 8 | 32,0 | 7,7 | 133,0 | 108,7 | 1,69 | 1,66 |
+| 16 | 43,3 | 7,7 | 144,3 | 108,7 | 1,68 | 1,42 |
+| 32 | 119,7 | 7,7 | 220,7 | 108,7 | 2,87 | 1,35 |
+
+### 5.3 Discussão
+
+**Pare-e-espera: o canal fica quase parado.** Um pacote de 1037 bytes leva 8,3 ms para sair do
+enlace e o ACK só volta depois de um RTT de 40 ms. A fórmula da aula,
+`U = (L/R) / (RTT + L/R)`, dá cerca de 17%, e o rdt3.0 mediu **16,3%**
+(a diferença vem da troca final do FIM, que acrescenta um RTT a uma transferência de 5,02 s). Ou
+seja, o remetente fica mais de 80% do tempo esperando.
+
+**A janela enche o canal.** Com N pacotes em trânsito por RTT, a utilização cresce quase
+linearmente com N, como prevê `U = N x (L/R) / (RTT + L/R)`: 32,4% com N = 2 e 63,8% com N = 4. São
+necessários cerca de 6 pacotes em trânsito para manter o canal ocupado, `(40 + 8,3) / 8,3`, e por isso
+**N = 8 já satura** o enlace (94,0%) e N = 16 e N = 32 não melhoram nada.
+
+**Por que a utilização satura em 94% e não em 100%.** Dois efeitos pequenos e inevitáveis:
+o cabeçalho de 13 bytes por pacote (cerca de 1,3% do tempo de transmissão não carrega dados úteis) e o
+RTT final, porque o último ACK precisa voltar antes de a transferência terminar (cerca
+de 40 ms em 0,87 s, perto de 4,6%). Os dois explicam os 94,0% observados.
+
+**Sem perda, GBN e SR são iguais.** As curvas se sobrepõem (diferença nas casas decimais),
+porque, sem perda, os dois enviam os mesmos pacotes na mesma ordem. A diferença entre eles só aparece
+quando há retransmissão.
+
+**Com perda, a política de retransmissão decide.** Com 5% de perda, o rdt3.0 cai para 14,0%: cada perda custa um
+timeout de cerca de 100 ms parado. A SR retransmitiu **7,7 pacotes em todas as janelas, o mesmo valor do rdt3.0**,
+ou seja, só reenvia o que se perdeu, e sua utilização continua crescendo com N, até 62,3% em N = 32. O GBN melhora até N = 8 (50,1%),
+fica estável em N = 16 (49,7%) e **cai para 28,9% em N = 32**: em cada timeout ele volta N e reenvia a janela inteira,
+e o receptor descarta os pacotes que já tinham chegado fora de ordem. Em N = 32, o GBN fez 119,7
+retransmissões contra 7,7 da SR, enviou 220,7 pacotes contra 108,7 e levou 2,87 s contra 1,35 s. Como os dois protocolos usam o **mesmo
+timeout**, essa diferença vem só da política de retransmissão.
+
+**A variação entre repetições é grande com perda.** Cada execução tem em média só 7,7 retransmissões (perdas de dados ou de ACKs), então as
+barras são largas (a SR em N = 32 foi de 49,7% a 72,3%; o GBN, de 24,9% a 33,0%). Em N = 8, GBN e SR (50,1% e 49,6%)
+ficam dentro dessa variação. O que os números sustentam é a **tendência**: a SR escala com a janela e o GBN, com perda, não.
+
+### 5.4 Limitações
+
+- **Simulação em uma máquina.** O enlace é emulado por threads e `time.sleep`, com precisão de
+  milissegundos; os valores absolutos dependem do computador, mas as proporções entre os
+  protocolos se mantêm.
+- **Timeout fixo.** Ele não se adapta ao RTT medido, como o TCP faz (seção 7), e cresce com N para
+  evitar retransmissão desnecessária. Um timeout menor ou adaptativo mudaria o desempenho com perda,
+  principalmente do GBN em janelas grandes.
+- **Poucas condições.** Foram duas taxas de perda (0% e 5%), um tamanho de arquivo, um RTT, uma
+  taxa de enlace e 3 repetições por ponto. A corrupção não entra na comparação (ela é coberta
+  pela suíte da seção 6), e o canal não reordena pacotes.
+- **Utilização do remetente.** A medida considera só os dados úteis do remetente; o tráfego de ACKs,
+  que é pequeno (13 bytes), não é contado.
+
+### 5.5 Conclusão da comparação
+
+A janela deslizante é o que torna o transporte confiável **eficiente**: com N = 8, GBN e SR usam
+cerca de 94% do enlace, contra 16% do pare-e-espera. Quando o canal perde pacotes, a política de
+retransmissão passa a importar: reenviar só o que se perdeu (SR) escala com a janela, e reenviar a janela
+inteira (GBN) deixa de compensar a partir de N = 8 e piora em N = 32, em que a utilização cai a menos da metade da SR.
+O custo da SR é a complexidade: um temporizador por pacote e um buffer no receptor.
 
 ## 6. Injeção de falhas e testes
 
