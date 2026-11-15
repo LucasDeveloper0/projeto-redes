@@ -563,11 +563,34 @@ A topologia (`testes/topologia_gargalo.py`) liga h1 a h2 por um switch: acesso d
 
 ## 9. Controle de congestionamento (bônus)
 
-> **Responsável:** Elias (requisito E)
-> **O que escrever:** a topologia com enlace gargalo, a partida lenta e o padrão
-> dente-de-serra do AIMD, e a análise do gráfico da cwnd.
-> **Material pronto:** `relatorio/analise_tcp.md` (pode ser incorporado aqui),
-> `graficos/grafico_cwnd.png`, `testes/topologia_gargalo.py`.
+Para observar o controle de congestionamento do TCP em atuação, foi montada no Mininet uma topologia controlada com enlace gargalo (`testes/topologia_gargalo.py`), utilizando o controle de tráfego `TCLink` do kernel Linux.
+
+### 9.1 Topologia e dimensionamento do gargalo
+
+A rede conecta um host remetente (`h1`) a um host receptor (`h2`) por meio de um switch central (`s1`), com parâmetros escolhidos a partir do Produto Banda-Atraso (BDP) para forçar o congestionamento:
+
+| Enlace | Taxa | Atraso de propagação | Buffer (fila) |
+| --- | --- | --- | --- |
+| Acesso (`h1` ↔ `s1`) | 100 Mbit/s | 5 ms | padrão |
+| Gargalo (`s1` ↔ `h2`) | 5 Mbit/s | 20 ms | 15 pacotes (`max_queue_size=15`) |
+
+- **RTT base e BDP:** O tempo de ida e volta mínimo sem fila é `2 × (5 ms + 20 ms) = 50 ms` (`0,05 s`). Na taxa de `5 Mbit/s`, a capacidade em trânsito no enlace gargalo é de `5 Mbit/s × 0,05 s = 250.000 bits = 31.250 bytes`, o que corresponde a cerca de **20,8 pacotes** padrão Ethernet de 1.500 bytes.
+- **Saturação controlada:** Ao limitar a fila do switch a **15 pacotes** (valor menor que 1 BDP), o buffer enche rapidamente sempre que a taxa de envio do remetente supera os `5 Mbit/s` de escoamento, provocando descartes por *tail drop* e acionando a recuperação do TCP.
+
+O tráfego TCP foi gerado com `iperf3` durante 15 s, e a janela de congestionamento (`cwnd`) foi coletada diretamente do kernel com `ss -ti` (`capturas/cwnd_log.txt`). Na geração do gráfico (`graficos/grafico_cwnd.png`), a conexão de controle do `iperf3` (que permanece fixa em `cwnd = 10`) foi filtrada para exibir apenas o fluxo de dados.
+
+### 9.2 Análise da janela de congestionamento (cwnd)
+
+![Figura 9.1: comportamento da cwnd no gargalo de 5 Mbit/s](../graficos/grafico_cwnd.png)
+
+*Figura 9.1 — Evolução da janela de congestionamento (`cwnd`) de um fluxo TCP CUBIC atravessando o gargalo de 5 Mbit/s com buffer de 15 pacotes (`graficos/grafico_cwnd.png`). O eixo horizontal usa o tempo ativo da conexão (`busy`) registrado pelo `ss -ti`.*
+
+O gráfico evidencia o comportamento cíclico de **"dente-de-serra"** do algoritmo padrão do Linux (**TCP CUBIC**):
+
+- **Partida lenta (*Slow Start*):** No início da transmissão, o TCP aumenta a `cwnd` exponencialmente a cada RTT para sondar a banda disponível, preenchendo rapidamente o enlace e os 15 pacotes da fila do switch `s1`.
+- **Saturação e descarte:** Quando a janela atinge o teto físico do caminho (picos entre **39 e 41 pacotes**, somando os pacotes em trânsito no enlace e os retidos no buffer), o pacote seguinte encontra a fila cheia e é descartado (*tail drop*).
+- **Redução multiplicativa do CUBIC:** Ao detectar a perda por ACKs duplicados, o remetente reduz a janela para aliviar o congestionamento. Diferente do TCP Reno clássico (que corta a `cwnd` pela metade), o CUBIC aplica um fator multiplicativo de aproximadamente **0,7**, fazendo a janela cair dos picos de ~40 pacotes para cerca de **28 pacotes** (com uma queda mais acentuada para 19 pacotes em ~7,6 s após perdas consecutivas).
+- **Recuperação em regime estável:** Após cada redução, a janela volta a crescer em função cúbica até atingir novamente o limite de ~40 pacotes, repetindo o ciclo ao longo de toda a transferência e mantendo o enlace gargalo próximo da ocupação máxima.
 
 ## 10. Conclusão
 
