@@ -141,6 +141,12 @@ def main():
     ap.add_argument("-v", "--verbose", action="store_true", help="mostra o log de eventos")
     a = ap.parse_args()
 
+    # O receptor lê no máximo BUFFER bytes por datagrama (cabeçalho + dados). Um pacote
+    # maior seria truncado/recusado e o remetente só desistiria após 100 timeouts.
+    maximo = BUFFER - Packet.HEADER_SIZE
+    if not 1 <= a.tamanho <= maximo:
+        ap.error(f"--tamanho deve estar entre 1 e {maximo} bytes (BUFFER {BUFFER} - cabeçalho)")
+
     # Sem -v só avisos; com -v todos os eventos do protocolo (DEBUG)
     logging.basicConfig(
         level=logging.DEBUG if a.verbose else logging.WARNING,

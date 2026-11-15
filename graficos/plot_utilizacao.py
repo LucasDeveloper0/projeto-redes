@@ -10,6 +10,7 @@ Uso:  python -m testes.experimentos   (gera os dados)
 """
 import csv
 import json
+import math
 import sys
 from collections import defaultdict
 from pathlib import Path
@@ -90,7 +91,7 @@ def main():
 
     # Pontos x da curva teórica: 8 pontos por oitava (potência de 2), para sair suave
     # no eixo logarítmico, indo do menor ao maior N medido.
-    teo_x = [2 ** (i / 8) for i in range(int(8 * __import__("math").log2(max(janelas))) + 1)]
+    teo_x = [2 ** (i / 8) for i in range(int(8 * math.log2(max(janelas))) + 1)]
     teo_x = [x for x in teo_x if x >= min(janelas)]
 
     for ax, perda in zip(eixos[0], perdas):
