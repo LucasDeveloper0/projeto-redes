@@ -1,3 +1,17 @@
+"""rdt3.0 - REMETENTE (pare-e-espera sobre UDP).
+
+Ideia do protocolo (Kurose & Ross, cap. 3):
+  1. envia UM pacote de dados com número de sequência 0 ou 1;
+  2. liga um temporizador e ESPERA o ACK desse pacote;
+  3. ACK correto (ack == seq)  -> próximo pacote, alternando o seq (0 -> 1 -> 0 ...);
+     ACK corrompido/errado     -> ignora e continua esperando o prazo;
+     timeout (nada chegou)     -> RETRANSMITE o mesmo pacote.
+Com isso o rdt3.0 lida com perda de pacote, perda de ACK e corrupção,
+detectada pelo checksum de Packet.extract.
+
+Só existe um pacote em trânsito por vez: simples e correto, mas deixa o enlace
+ocioso quase o tempo todo (por isso o GBN e o SR existem; ver testes/experimentos.py).
+"""
 import argparse
 import logging
 import socket
@@ -12,17 +26,24 @@ from common.arquivo import sha256_arquivo  # noqa: E402
 from common.channel import UnreliableSocket  # noqa: E402
 from common.packet import ACK, DADOS, Packet  # noqa: E402
 
+# Logger do remetente. Com -v mostra cada evento (timeout, retransmissão, ACK ...)
 log = logging.getLogger("rdt30.tx")
 
-BUFFER = 2048
+BUFFER = 2048           # tamanho máximo de um datagrama lido do socket
 TAMANHO_PADRAO = 1024   # bytes de dados por pacote
 TIMEOUT_PADRAO = 0.1    # segundos
 MAX_TENTATIVAS = 100    # timeouts seguidos no mesmo pacote antes de desistir
 
 
 def _enviar_e_esperar_ack(sock, destino, pacote, seq, timeout, max_tentativas, st):
+    """Envia `pacote` e só retorna quando chegar um ACK íntegro com número `seq`.
+
+    Este laço é o coração da FSM do remetente: estados "espera ACK 0" e
+    "espera ACK 1" (o seq escolhe qual dos dois). `st` é o dicionário de métricas.
+    """
     tentativas = 0
     while True:
+        # (re)envia o pacote; o canal pode perdê-lo ou corrompê-lo
         sock.sendto(pacote, destino)
         st["pacotes_enviados"] += 1
         if tentativas > 0:
@@ -31,13 +52,16 @@ def _enviar_e_esperar_ack(sock, destino, pacote, seq, timeout, max_tentativas, s
         else:
             log.debug("envio seq=%d", seq)
 
+        # Temporizador: instante limite para o ACK chegar. Usamos um prazo fixo
+        # (e não timeout a cada recv) para que ACKs ignorados NÃO "renovem" a espera.
         prazo = time.perf_counter() + timeout  # temporizador do pacote
         while True:
             restante = prazo - time.perf_counter()
             if restante <= 0:
+                # estourou o prazo: sai do laço interno e retransmite (lá embaixo)
                 log.info("TIMEOUT seq=%d", seq)
                 break
-            sock.settimeout(restante)
+            sock.settimeout(restante)  # recvfrom espera no máximo o tempo que resta
             try:
                 dados, _ = sock.recvfrom(BUFFER)
             except socket.timeout:
@@ -45,18 +69,23 @@ def _enviar_e_esperar_ack(sock, destino, pacote, seq, timeout, max_tentativas, s
             except ConnectionResetError:
                 continue  # Windows: ICMP "porta inalcançável" (receptor ainda não subiu)
 
+            # Packet.extract confere o checksum; devolve None se o pacote chegou corrompido
             resultado = Packet.extract(dados)
             if resultado is None:
                 st["acks_corrompidos"] += 1
                 log.info("ACK CORROMPIDO detectado pelo checksum -> descartado")
-                continue
+                continue  # não faz nada: continua esperando até o prazo
             tipo, _, ack, _, _ = resultado
             if tipo == ACK and ack == seq:
+                # ACK certo para o pacote em trânsito: terminou este pacote
                 log.debug("ACK %d recebido", ack)
                 return
+            # ACK de outro número (duplicado de um pacote anterior): ignora.
+            # NÃO retransmite agora; o rdt3.0 só reage ao timeout.
             st["acks_duplicados"] += 1
             log.info("ACK %s inesperado (esperado %d) -> ignorado", ack, seq)
 
+        # chegou aqui = timeout. Conta a tentativa e, se exceder o limite, desiste.
         tentativas += 1
         if tentativas > max_tentativas:
             raise ConnectionError(
@@ -66,7 +95,11 @@ def _enviar_e_esperar_ack(sock, destino, pacote, seq, timeout, max_tentativas, s
 
 def enviar_arquivo(sock, destino, caminho, timeout=TIMEOUT_PADRAO,
                    tamanho=TAMANHO_PADRAO, max_tentativas=MAX_TENTATIVAS):
-    
+    """Envia o arquivo `caminho` para `destino` e devolve o dicionário de métricas.
+
+    Métricas: retransmissoes, pacotes_enviados, acks_corrompidos, acks_duplicados,
+    bytes_uteis (só dados, sem cabeçalho), tempo_total e sha256 do arquivo enviado.
+    """
     st = {
         "retransmissoes": 0,
         "pacotes_enviados": 0,
@@ -74,24 +107,27 @@ def enviar_arquivo(sock, destino, caminho, timeout=TIMEOUT_PADRAO,
         "acks_duplicados": 0,
         "bytes_uteis": 0,
     }
-    seq = 0
+    seq = 0  # número de sequência atual: só pode valer 0 ou 1
     inicio = time.perf_counter()
     with open(caminho, "rb") as f:
         while True:
             chunk = f.read(tamanho)
-            # chunk vazio = fim do arquivo: manda o pacote FIM (DADOS sem dados)
+            # chunk vazio = fim do arquivo: manda o pacote FIM (DADOS sem dados).
+            # O receptor reconhece o FIM justamente por ter payload vazio.
             pacote = Packet.make(DADOS, seq, 0, chunk)
+            # bloqueia aqui até o ACK chegar (pare-e-espera)
             _enviar_e_esperar_ack(sock, destino, pacote, seq, timeout, max_tentativas, st)
             if not chunk:
-                break
+                break  # o FIM foi confirmado: transferência concluída
             st["bytes_uteis"] += len(chunk)
-            seq ^= 1  # alterna 0/1
+            seq ^= 1  # alterna 0/1 (XOR com 1)
     st["tempo_total"] = time.perf_counter() - inicio
-    st["sha256"] = sha256_arquivo(caminho)
+    st["sha256"] = sha256_arquivo(caminho)  # para comparar com o hash do receptor
     return st
 
 
 def main():
+    """Interface de linha de comando: monta o canal e chama enviar_arquivo."""
     ap = argparse.ArgumentParser(description="rdt3.0 remetente (pare-e-espera sobre UDP)")
     ap.add_argument("arquivo", help="arquivo a enviar")
     ap.add_argument("--host", default="127.0.0.1")
@@ -105,12 +141,14 @@ def main():
     ap.add_argument("-v", "--verbose", action="store_true", help="mostra o log de eventos")
     a = ap.parse_args()
 
+    # Sem -v só avisos; com -v todos os eventos do protocolo (DEBUG)
     logging.basicConfig(
         level=logging.DEBUG if a.verbose else logging.WARNING,
         format="%(asctime)s.%(msecs)03d [%(name)s] %(message)s",
         datefmt="%H:%M:%S",
     )
 
+    # O canal não confiável simula perda/corrupção/atraso (e fixa a semente)
     sock = UnreliableSocket(loss=a.perda, corrupt=a.corrupcao, delay=a.atraso, seed=a.seed)
     try:
         st = enviar_arquivo(sock, (a.host, a.porta), a.arquivo, a.timeout, a.tamanho)

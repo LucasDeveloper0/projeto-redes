@@ -1,3 +1,13 @@
+"""Gráfico de utilização do canal: rdt3.0 vs Go-Back-N vs Repetição Seletiva.
+
+Lê graficos/experimentos.jsonl (gerado por testes/experimentos.py) e produz:
+  - graficos/grafico_utilizacao.png : um painel por taxa de perda; eixo x = janela N,
+    eixo y = utilização média (barras de erro = mínimo e máximo das repetições);
+  - graficos/utilizacao_resumo.csv  : os mesmos números em tabela (para o relatório).
+
+Uso:  python -m testes.experimentos   (gera os dados)
+      python graficos/plot_utilizacao.py
+"""
 import csv
 import json
 import sys
@@ -6,7 +16,7 @@ from pathlib import Path
 
 import matplotlib
 
-matplotlib.use("Agg")
+matplotlib.use("Agg")  # backend sem janela: só grava o arquivo PNG
 import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.ticker import FuncFormatter  # noqa: E402
 
@@ -21,6 +31,7 @@ TEXTO = "#0b0b0b"
 TEXTO_2 = "#52514e"
 GRADE = "#e3e2de"
 # nome: (cor, marcador, preenchimento, rótulo)
+# SR usa marcador vazado e GBN cheio: distinguir sem depender só da cor (daltonismo)
 ESTILO = {
     "gbn": ("#2a78d6", "o", True, "Go-Back-N"),
     "sr": ("#eb6834", "s", False, "Repetição Seletiva"),
@@ -29,11 +40,13 @@ ESTILO = {
 
 
 def carregar():
+    """Lê o .jsonl e devolve só as execuções cujo hash conferiu."""
     if not ENTRADA.exists():
         sys.exit(f"{ENTRADA} não existe. Rode antes: python -m testes.experimentos")
     linhas = [json.loads(l) for l in ENTRADA.read_text(encoding="utf-8").splitlines() if l.strip()]
     if not linhas:
         sys.exit("arquivo de resultados vazio")
+    # Execução com hash diferente = transferência incorreta; não entra no gráfico
     ruins = [l for l in linhas if not l["ok_hash"]]
     if ruins:
         print(f"AVISO: {len(ruins)} execução(ões) com hash diferente foram ignoradas")
@@ -49,16 +62,21 @@ def agregar(linhas):
 
 
 def teorica(n, l):
-    """Limite teórico da aula, descontando o cabeçalho (só dados úteis contam)."""
-    tx_pacote = (l["tamanho_dados"] + l["cabecalho"]) * 8 / l["taxa_bps"]
+    """Limite teórico da aula, descontando o cabeçalho (só dados úteis contam).
+
+    Fórmula do livro: U = N * (L/R) / (RTT + L/R), limitada a 100%.
+    Como só os bytes de dados são "úteis", multiplicamos por dados/(dados+cabeçalho).
+    """
+    tx_pacote = (l["tamanho_dados"] + l["cabecalho"]) * 8 / l["taxa_bps"]  # L/R em segundos
     u = n * tx_pacote / (l["rtt"] + tx_pacote)
     return min(1.0, u) * l["tamanho_dados"] / (l["tamanho_dados"] + l["cabecalho"])
 
 
 def main():
+    """Monta a figura (um painel por perda) e grava o PNG e o CSV."""
     linhas = carregar()
     agg = agregar(linhas)
-    ref = linhas[0]
+    ref = linhas[0]  # parâmetros do enlace (iguais em todas as linhas)
     perdas = sorted({l["perda"] for l in linhas})
     janelas = sorted({l["janela"] for l in linhas if l["protocolo"] != "rdt30"})
 
@@ -70,10 +88,13 @@ def main():
     fig, eixos = plt.subplots(1, len(perdas), figsize=(5.6 * len(perdas), 4.8),
                               sharey=True, squeeze=False, facecolor=SUPERFICIE)
 
+    # Pontos x da curva teórica: 8 pontos por oitava (potência de 2), para sair suave
+    # no eixo logarítmico, indo do menor ao maior N medido.
     teo_x = [2 ** (i / 8) for i in range(int(8 * __import__("math").log2(max(janelas))) + 1)]
     teo_x = [x for x in teo_x if x >= min(janelas)]
 
     for ax, perda in zip(eixos[0], perdas):
+        # estilo do painel: grade só horizontal, sem bordas superior/direita
         ax.set_facecolor(SUPERFICIE)
         ax.grid(axis="y", color=GRADE, linewidth=0.8)
         ax.set_axisbelow(True)
@@ -95,6 +116,7 @@ def main():
                         marker=mk, markersize=7, capsize=3, linewidth=1.5, linestyle="none",
                         label=rot, zorder=5)
 
+        # GBN e SR: curva = média por janela; barras de erro = mín./máx. das repetições
         for proto in ("gbn", "sr"):
             xs = [n for n in janelas if (perda, proto, n) in agg]
             ms = [agg[(perda, proto, n)][0] * 100 for n in xs]
@@ -105,6 +127,7 @@ def main():
                         markerfacecolor=cor if cheio else "none", markeredgewidth=1.8,
                         linewidth=2.0, capsize=3, label=rot, zorder=4 if cheio else 3)
 
+        # eixo x em escala log base 2 (as janelas medidas são potências de 2)
         ax.set_xscale("log", base=2)
         ax.set_xticks(janelas)
         ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{int(v)}"))
@@ -116,12 +139,14 @@ def main():
                      fontsize=11, color=TEXTO, fontweight="bold")
     eixos[0][0].set_ylabel("Utilização do canal")
 
+    # Uma legenda única para a figura inteira (pega os itens do primeiro painel)
     h, r = eixos[0][0].get_legend_handles_labels()
     fig.legend(h, r, loc="lower center", ncol=4, frameon=False, fontsize=9.5,
                labelcolor=TEXTO_2)
     mbps = ref["taxa_bps"] / 1e6
     fig.suptitle("Utilização do canal: pare-e-espera vs Go-Back-N vs Repetição Seletiva",
                  x=0.01, ha="left", fontsize=13, fontweight="bold", color=TEXTO)
+    # Subtítulo com os parâmetros do experimento, para o gráfico se explicar sozinho
     fig.text(0.01, 0.905, f"Enlace de {mbps:g} Mbit/s, RTT de {ref['rtt'] * 1000:.0f} ms, "
              f"pacotes de {ref['tamanho_dados']} bytes de dados; mesma perda e mesmo arquivo "
              f"nos três protocolos", ha="left", fontsize=9, color=TEXTO_2)

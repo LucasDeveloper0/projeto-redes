@@ -1,3 +1,20 @@
+"""Experimentos de utilização do canal: rdt3.0 vs Go-Back-N vs Repetição Seletiva.
+
+Pergunta do relatório: o que acontece com a utilização do enlace quando
+aumentamos a janela N, com e sem perda? Para responder:
+  - usa o EnlaceSocket (taxa + atraso + fila), com um enlace lento (padrão 1 Mbit/s)
+    e RTT conhecido (padrão 40 ms), para que haja um "produto banda x atraso";
+  - transfere o MESMO arquivo com cada protocolo, para cada janela N e perda;
+  - repete cada ponto com sementes diferentes (média, mínimo e máximo no gráfico);
+  - confere o SHA-256 em toda execução (resultado com hash errado não vale);
+  - grava uma linha por execução em graficos/experimentos.jsonl.
+
+Utilização = (bytes úteis x 8 / taxa) / tempo total
+           = fração do tempo em que o enlace carregou DADOS do arquivo.
+O gráfico é gerado depois por graficos/plot_utilizacao.py.
+
+Uso:  python -m testes.experimentos [--rapido] [--repeticoes 3] [--janelas 1 2 4 8 16 32]
+"""
 import argparse
 import random
 import sys
@@ -26,11 +43,15 @@ FOLGA_TIMEOUT = 0.05  # s somados ao timeout
 
 def rodar(protocolo, janela, arquivo, saida, perda, atraso, taxa_bps, seed):
     """Uma transferência completa. Devolve (stats_remetente, timeout_usado)."""
+    # tamanho de um pacote na rede, em BITS (dados + cabeçalho de 13 bytes)
     tam_pacote = (TAMANHO_DADOS + Packet.HEADER_SIZE) * 8
-    # RTT + tempo de a janela inteira sair do enlace + folga
+    # Timeout adaptado à janela: RTT + tempo de a janela inteira sair do enlace + folga.
+    # Sem isso, janelas grandes estourariam o timeout só por esperar na fila do enlace
+    # (retransmissões falsas), e o experimento mediria o timeout, não o protocolo.
     timeout = 2 * atraso + janela * tam_pacote / taxa_bps + FOLGA_TIMEOUT
     linger = max(0.3, 1.5 * timeout)
 
+    # O mesmo enlace (taxa, atraso, perda) vale para os dois sentidos; sementes distintas
     rx = EnlaceSocket(loss=perda, atraso=atraso, taxa_bps=taxa_bps, seed=seed + 1)
     rx.bind(("127.0.0.1", 0))
     destino = rx.sock.getsockname()
@@ -39,12 +60,14 @@ def rodar(protocolo, janela, arquivo, saida, perda, atraso, taxa_bps, seed):
     resultado = {}
 
     def lado_receptor():
+        # O receptor roda em thread própria; escolhemos a implementação do protocolo
         try:
             if protocolo == "rdt30":
                 rdt_rx.receber_arquivo(rx, saida, inatividade=30.0, linger=linger)
             elif protocolo == "gbn":
                 gbn_rx.receber_arquivo(rx, saida, inatividade=30.0, linger=linger)
             else:
+                # SR: o receptor também precisa saber a janela (tamanho do buffer)
                 sr_rx.receber_arquivo(rx, saida, inatividade=30.0, linger=linger, janela=janela)
         except Exception as e:  # noqa: BLE001 - repassa para a thread principal
             resultado["erro"] = e
@@ -52,6 +75,7 @@ def rodar(protocolo, janela, arquivo, saida, perda, atraso, taxa_bps, seed):
     t = threading.Thread(target=lado_receptor, daemon=True)
     t.start()
     try:
+        # O remetente roda na thread principal e é quem mede o tempo total
         if protocolo == "rdt30":
             st = rdt_tx.enviar_arquivo(tx, destino, arquivo, timeout=timeout)
         elif protocolo == "gbn":
@@ -68,6 +92,7 @@ def rodar(protocolo, janela, arquivo, saida, perda, atraso, taxa_bps, seed):
 
 
 def main():
+    """Varre protocolo x janela x perda x repetição e grava os resultados em .jsonl."""
     ap = argparse.ArgumentParser(description="Experimentos de utilização do canal")
     ap.add_argument("--kb", type=int, default=100, help="tamanho do arquivo (KB)")
     ap.add_argument("--janelas", type=int, nargs="+", default=[1, 2, 4, 8, 16, 32],
@@ -88,7 +113,7 @@ def main():
     if a.rapido:
         a.kb = 30
 
-    taxa_bps = a.taxa_mbps * 1e6
+    taxa_bps = a.taxa_mbps * 1e6  # Mbit/s -> bit/s
     destino_jsonl = Path(a.saida)
     if destino_jsonl.exists() and not a.acrescentar:
         destino_jsonl.unlink()  # evita misturar execuções diferentes no gráfico
@@ -101,6 +126,7 @@ def main():
     with tempfile.TemporaryDirectory() as tmp:
         tmp = Path(tmp)
         origem = tmp / "teste.bin"
+        # arquivo pseudoaleatório reprodutível, igual para todos os protocolos
         origem.write_bytes(random.Random(a.seed).randbytes(a.kb * 1024))
         hash_origem = sha256_arquivo(origem)
         rtt_ms = 2 * a.atraso * 1000
@@ -115,16 +141,20 @@ def main():
                 for rep in range(a.repeticoes):
                     feitas += 1
                     saida = tmp / "recebido.bin"
+                    # cada repetição usa uma semente diferente (perdas diferentes)
                     seed = a.seed + 1000 * rep
                     try:
                         st, timeout = rodar(protocolo, janela, origem, saida,
                                             perda, a.atraso, taxa_bps, seed)
                         ok = sha256_arquivo(saida) == hash_origem
                     except Exception as e:  # noqa: BLE001
+                        # uma execução que falha não derruba o experimento inteiro
                         print(f"{feitas:>3}/{total:<4} {protocolo:<9}{janela:>3}{perda:>7.0%}  ERRO: {e}")
                         falhas += 1
                         continue
                     falhas += not ok
+                    # Utilização: tempo "útil" de enlace (só dados do arquivo) / tempo total.
+                    # O cabeçalho e as retransmissões não contam como útil.
                     util = (st["bytes_uteis"] * 8 / taxa_bps) / st["tempo_total"]
                     print(f"{feitas:>3}/{total:<4} {protocolo:<9}{janela:>3}{perda:>7.0%}"
                           f"{'OK' if ok else 'FALHOU':>7}{st['tempo_total']:>10.2f}"
