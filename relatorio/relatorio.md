@@ -320,11 +320,180 @@ com perda. O número de sequência de 4 bytes evita a volta ao zero nos arquivos
 
 ## 4. Repetição Seletiva
 
-> **Responsável:** João Pedro (requisito B)
-> **O que escrever:** o funcionamento da SR (janela no remetente e no receptor, buffer de
-> pacotes fora de ordem, ACK individual, temporizador por pacote), a implementação,
-> os resultados e a diferença em relação ao Go-Back-N.
-> **Material pronto:** `sr/`, `testes/validar_sr.py`, `capturas/resultados_testes.md`.
+### 4.1 Funcionamento
+
+A Repetição Seletiva (SR, de *Selective Repeat*) também é um protocolo de **janela
+deslizante**: como no GBN, o remetente pode ter até **N pacotes enviados e ainda não
+confirmados**. A diferença está no que acontece quando um pacote se perde. O GBN joga fora o
+que chega fora de ordem e reenvia a janela inteira. A SR guarda o que chega fora de ordem e
+reenvia **só o pacote perdido**.
+
+O remetente usa as mesmas variáveis do GBN, `base` e `proximo`, e só envia quando
+`proximo < base + N`. As regras mudam assim:
+
+- **ACK individual:** um ACK com número `k` confirma **só** o pacote `k`. O remetente marca
+  aquele pacote como confirmado, mas a janela só desliza quando os primeiros pacotes dela
+  estão todos confirmados: enquanto `base` estiver confirmado, `base` avança.
+- **Um temporizador por pacote:** cada pacote sem ACK tem o seu próprio prazo. O
+  temporizador de um pacote liga quando ele é enviado e desliga quando o ACK dele chega.
+- **Timeout:** quando o prazo de um pacote vence, o remetente retransmite **só aquele
+  pacote** e religa o temporizador dele.
+- **Receptor com janela e buffer:** o receptor tem a sua própria janela,
+  `[rcv_base, rcv_base + N - 1]`, onde `rcv_base` é o menor pacote ainda não entregue. Todo
+  pacote íntegro dentro da janela recebe ACK. Se ele chega fora de ordem, fica guardado em
+  um buffer; quando o pacote `rcv_base` chega, o receptor entrega ele e todos os seguintes que
+  já estavam guardados, em ordem.
+- **Duplicados:** um pacote que já foi entregue (`seq < rcv_base`) significa que o ACK dele
+  se perdeu. O receptor repete o ACK, sem entregar os dados de novo.
+- **Sem ACK para o que não serve:** pacote com checksum inválido ou acima da janela é
+  descartado sem ACK. Na SR não existe um "último ACK" para repetir, como no GBN; o
+  remetente recupera aquele pacote pelo temporizador dele.
+
+Exemplo com N = 4, pacotes 0 a 3, e o pacote 1 perdido:
+
+| Momento | Go-Back-N | Repetição Seletiva |
+| --- | --- | --- |
+| Chegam 2 e 3 | descarta os dois (fora de ordem) | guarda os dois e envia ACK 2 e ACK 3 |
+| Timeout do pacote 1 | reenvia 1, 2 e 3 | reenvia só o 1 |
+| Chega o 1 | entrega o 1 e espera de novo o 2 e o 3 | entrega 1, 2 e 3 de uma vez |
+
+O preço da economia é a complexidade: o receptor precisa de memória para o buffer e o
+remetente precisa controlar N temporizadores em vez de um.
+
+### 4.2 Máquina de estados (FSM)
+
+O remetente tem os mesmos dois estados do GBN, **janela vazia** e **pacotes em trânsito**,
+mas com um temporizador por pacote sem ACK. O receptor tem um estado só, com a janela de
+recepção e o buffer de pacotes fora de ordem.
+
+![FSM do remetente da Repetição Seletiva](../graficos/fsm_sr_remetente.png)
+
+![FSM do receptor da Repetição Seletiva](../graficos/fsm_sr_receptor.png)
+
+A tabela que liga cada elemento da FSM ao conceito da aula e ao trecho do código está em
+`relatorio/fsm_sr.md`.
+
+### 4.3 Implementação
+
+A implementação está em `sr/remetente.py` e `sr/receptor.py`, no mesmo padrão do rdt3.0 e do
+GBN: mesmas funções (`enviar_arquivo` e `receber_arquivo`), mesmas opções de linha de
+comando, mesmas estatísticas e mesmos valores padrão, para a comparação ser justa.
+
+- **Formato do pacote e canal:** os mesmos do GBN (`common/packet.py` e
+  `common/channel.py`). O número confirmado vai no campo `ack_num`; o `seq_num` do ACK não é
+  usado.
+- **Temporizador por pacote:** o remetente guarda um dicionário `prazos = {seq: prazo}`.
+  O laço espera um ACK até o **menor** prazo entre os pacotes sem ACK; se ele vence, reenvia
+  só os pacotes cujo prazo passou. Como no GBN, tudo roda em uma thread só, sem travas.
+- **ACK individual:** os pacotes confirmados fora de ordem ficam no conjunto `confirmados`
+  até a base chegar neles. Cada pacote também conta quantos timeouts sofreu; depois de 100
+  seguidos no mesmo pacote, o remetente desiste com erro.
+- **Buffer do receptor:** o dicionário `guardados = {seq: dados}` recebe os pacotes fora de
+  ordem. Quando chega o pacote `rcv_base`, o laço `while rcv_base in guardados` grava no
+  arquivo tudo o que estiver contíguo.
+- **Janela do receptor:** `receber_arquivo()` recebe o tamanho da janela pelo parâmetro
+  `janela` (padrão 8), e o receptor de linha de comando, por `--janela`. Deve ser igual à do
+  remetente. Se for menor, a transferência continua correta, mas pacotes acima da janela são
+  ignorados e só chegam depois, por retransmissão.
+- **Fim do arquivo:** o mesmo pacote de dados vazio do rdt3.0 e do GBN. Na SR ele pode chegar
+  fora de ordem e ficar no buffer como qualquer outro. Depois de entregá-lo, o receptor
+  continua respondendo por um tempo (*linger*) com o ACK de **cada** pacote repetido, e não
+  só do FIM, porque o ACK de outros pacotes da última janela também pode ter se perdido.
+- **Números de sequência:** a teoria exige N ≤ metade do espaço de números de sequência, para
+  o receptor não confundir um pacote novo com uma retransmissão antiga. Como o número de
+  sequência tem 4 bytes e não volta ao zero nos arquivos usados, esse problema não ocorre.
+- **Métricas e log:** as mesmas chaves do GBN (`retransmissoes`, `pacotes_enviados`,
+  `bytes_uteis`, `tempo_total`, `sha256`). O receptor conta também os pacotes guardados fora
+  de ordem, os duplicados e os ignorados por estarem fora da janela. O log usa os termos
+  `ENVIA`, `TIMEOUT`, `RETRANSMISSÃO`, `DESCARTA`, `FORA DE ORDEM` e `DUPLICADO`.
+
+Exemplo de execução, em dois terminais:
+
+```bash
+python sr/receptor.py --porta 5000 --saida recebido.bin --janela 8
+python sr/remetente.py arquivo.bin --porta 5000 --janela 8 --perda 0.1 --seed 42
+```
+
+### 4.4 Resultados nos cenários de teste
+
+Na suíte automatizada (`testes/test_suite.py`), a SR passou nos cinco cenários, sempre com o
+SHA-256 do arquivo recebido igual ao do enviado. Os números vêm de
+`capturas/resultados_testes.md` (arquivo de 100 KB, N = 8, semente 42):
+
+| Cenário | Hash | Tempo (s) | Retransmissões | Pacotes perdidos | Pacotes corrompidos | Detectados pelo checksum |
+| --- | --- | --- | --- | --- | --- | --- |
+| sem falhas | OK | 0,03 | 0 | 0 | 0 | 0 |
+| 10% de perda | OK | 0,86 | 27 | 27 | 0 | 0 |
+| 20% de perda | OK | 1,49 | 55 | 55 | 0 | 0 |
+| só corrupção (20%) | OK | 1,49 | 66 | 0 | 66 | 66 |
+| perda 10% + corrupção 10% | OK | 2,04 | 75 | 38 | 37 | 37 |
+
+- **Uma retransmissão por falha.** Nos cenários com perda, o número de retransmissões é
+  igual ao de pacotes perdidos (27 e 55), e no cenário misto é igual à soma de perdidos e
+  corrompidos (38 + 37 = 75). Cada falha custou exatamente um reenvio, que é o que a SR
+  promete.
+- **Toda corrupção foi detectada:** o número de pacotes corrompidos é igual ao detectado pelo
+  checksum.
+
+O trecho abaixo, de `capturas/logs_testes/sr__10_de_perda.log` (linhas 7 a 20, sem o
+horário), mostra o buffer funcionando:
+
+```
+[sr.rx] FORA DE ORDEM seq=9 (rcv_base=8) -> guardado no buffer, ACK 9
+[sr.rx] FORA DE ORDEM seq=10 (rcv_base=8) -> guardado no buffer, ACK 10
+[sr.rx] FORA DE ORDEM seq=11 (rcv_base=8) -> guardado no buffer, ACK 11
+[sr.rx] FORA DE ORDEM seq=14 (rcv_base=8) -> guardado no buffer, ACK 14
+[sr.rx] FORA DE ORDEM seq=15 (rcv_base=8) -> guardado no buffer, ACK 15
+[sr.tx] TIMEOUT seq=8
+[sr.tx] RETRANSMISSÃO seq=8 (tentativa 2)
+[sr.tx] TIMEOUT seq=10
+[sr.tx] RETRANSMISSÃO seq=10 (tentativa 2)
+[sr.tx] TIMEOUT seq=12
+[sr.rx] DUPLICADO seq=10 (rcv_base=12) -> DESCARTA, reenvia ACK 10
+[sr.tx] RETRANSMISSÃO seq=12 (tentativa 2)
+[sr.tx] TIMEOUT seq=13
+[sr.tx] RETRANSMISSÃO seq=13 (tentativa 2)
+```
+
+Os pacotes 8, 12 e 13 se perderam. O receptor guardou 9, 10, 11, 14 e 15 no buffer e
+confirmou cada um. O remetente reenviou só os pacotes cujo temporizador estourou: 8, 12, 13 e
+o 10, cujo ACK tinha se perdido. Assim que o 8 chegou, o receptor entregou de uma vez 8, 9,
+10 e 11 (`rcv_base` passou de 8 para 12), e por isso tratou a cópia do 10 como duplicada:
+descartou os dados e repetiu o ACK 10. No GBN, a perda do 8 teria feito o receptor descartar
+9, 10, 11, 14 e 15, e o remetente teria reenviado a janela inteira.
+
+### 4.5 Diferença em relação ao Go-Back-N
+
+| Característica | Go-Back-N | Repetição Seletiva |
+| --- | --- | --- |
+| ACK | cumulativo: `ack = k` confirma tudo até `k` | individual: `ack = k` confirma só o `k` |
+| Temporizador | um só, do pacote `base` | um por pacote sem ACK |
+| No timeout reenvia | todos os pacotes de `base` a `proximo - 1` | só o pacote vencido |
+| Pacote fora de ordem no receptor | descartado | guardado no buffer e confirmado |
+| Memória no receptor | nenhuma (só o número esperado) | até N pacotes |
+| Pacote corrompido no receptor | descarta e repete o último ACK | descarta, sem ACK |
+
+**Retransmissões.** Nos mesmos cenários e com a mesma semente, a SR retransmitiu bem menos
+que o GBN: 27 contra 88 com 10% de perda, 55 contra 178 com 20% de perda, 66 contra 226 só
+com corrupção e 75 contra 206 no cenário misto. No GBN, cada timeout reenvia também pacotes
+que já tinham chegado; na SR, cada falha custa um reenvio.
+
+**Utilização do canal.** Nos experimentos da seção 5 (enlace de 1 Mbit/s, RTT de 40 ms), sem
+perda os dois protocolos se comportam igual: a utilização cresce com N e satura em cerca de
+94% a partir de N = 8. Com 5% de perda, eles se separam nas janelas grandes. O GBN para de
+melhorar em N = 8 (50,1%) e cai para 28,9% com N = 32, enquanto a SR continua subindo e chega
+a 58,0% com N = 16 e 62,3% com N = 32. Em N = 32, o GBN fez em média 119,7 retransmissões
+contra 7,7 da SR (seção 5.3). Quanto maior a janela, mais pacotes o GBN joga fora a cada
+perda, e mais a SR economiza.
+
+**Tempo nos testes curtos.** Na tabela da seção 4.4, a SR não foi mais rápida que o GBN (0,86 s
+contra 0,68 s com 10% de perda). Nesses testes não há atraso nem limite de taxa no canal, então
+reenviar pacotes a mais custa quase nada, e o tempo é dominado pelos timeouts. A vantagem da
+SR aparece quando o canal tem capacidade limitada, como nos experimentos da seção 5.
+
+**Limitações.** Como no GBN, o timeout é fixo (0,1 s), sem adaptação ao RTT medido. O
+receptor não avisa o remetente sobre o que falta: ele só confirma o que recebeu, e o remetente
+descobre a perda pelo timeout, sem retransmissão rápida.
 
 ## 5. Comparação da utilização do canal
 
@@ -883,5 +1052,103 @@ O gráfico evidencia o comportamento cíclico de **"dente-de-serra"** do algorit
 
 ## Apêndice: como executar
 
-> **Responsável:** João Pedro (a partir do `README.md` do repositório)
-> Comandos para rodar cada protocolo e os testes.
+Comandos para rodar cada protocolo, os testes e os experimentos. Todos são executados da raiz do repositório e funcionam no Windows, no Linux e no macOS (no Linux e no macOS, troque `python` por `python3` se necessário). Os protocolos e os testes usam só a biblioteca padrão do Python (3.9 ou mais novo); os gráficos precisam do `matplotlib` (`pip install matplotlib`). O mesmo conteúdo está no `README.md` do repositório.
+
+### Transferir um arquivo
+
+Cada protocolo tem um receptor e um remetente. Abra dois terminais e inicie o
+**receptor primeiro**. Exemplo com a Repetição Seletiva:
+
+```
+python -m sr.receptor --porta 5000 --saida recebido.bin
+python -m sr.remetente arquivo.bin --porta 5000 --janela 8 --perda 0.1 --seed 42 -v
+```
+
+Para os outros protocolos, troque `sr` por `gbn` ou `rdt30` (o rdt3.0 não tem `--janela`).
+Os dois lados mostram o SHA-256 no final: se forem iguais, o arquivo chegou íntegro.
+
+Opções do remetente:
+
+| Opção | Significado | Padrão |
+|---|---|---|
+| `--host`, `--porta` | endereço do receptor | `127.0.0.1`, `5000` |
+| `--janela` | tamanho N da janela (GBN e SR) | `8` |
+| `--perda` | probabilidade de perder cada pacote (0 a 1) | `0` |
+| `--corrupcao` | probabilidade de corromper cada pacote (0 a 1) | `0` |
+| `--atraso` | atraso do canal, em segundos | `0` |
+| `--seed` | semente do canal, para repetir o mesmo experimento | aleatória |
+| `--timeout` | timeout de retransmissão, em segundos | `0.1` |
+| `--tamanho` | bytes de dados por pacote | `1024` |
+| `-v` | mostra o log de eventos | desligado |
+
+O receptor aceita `--host`, `--porta`, `--saida`, `--perda`, `--corrupcao`, `--atraso`,
+`--seed`, `--inatividade` (s sem receber nada antes de desistir, padrão 30),
+`--linger` (padrão 1) e `-v`. No receptor, `--perda` e `--corrupcao` valem para os ACKs.
+O receptor da SR também aceita `--janela`, que deve ser igual à do remetente.
+
+Com `-v`, o log mostra cada evento da transferência, como `TIMEOUT`, `RETRANSMISSÃO`,
+`FORA DE ORDEM`, `DUPLICADO`, `FIM` e os pacotes e ACKs descartados por corrupção.
+
+### Validar cada protocolo nos 5 cenários
+
+Transfere um arquivo de 100 KB em cada cenário (sem falhas, 10% de perda, 20% de perda,
+20% de corrupção e 10% de perda + 10% de corrupção) e compara o SHA-256 do recebido com o
+do enviado:
+
+```
+python -m testes.validar_rdt30
+python -m testes.validar_gbn
+python -m testes.validar_sr
+```
+
+Opções: `--janela N`, `--kb`, `--timeout`, `--registrar` (grava as métricas em
+`graficos/resultados.jsonl`) e `-v` (log de eventos).
+
+### Suíte automatizada de testes (requisito C)
+
+Roda os 3 protocolos nos 5 cenários (15 testes). Além do hash, confere que o mecanismo de
+recuperação foi realmente acionado: perda gera retransmissão, e toda corrupção é detectada
+pelo checksum.
+
+```
+python -m unittest testes.test_suite -v
+python -m testes.teste_canal
+```
+
+A suíte atualiza `capturas/resultados_testes.md` (tabela de resultados) e
+`capturas/logs_testes/` (um log por protocolo e cenário, com a sequência detecção,
+descarte, timeout e retransmissão). O `teste_canal` confere só o canal: toda perda é
+contada e toda corrupção é detectada.
+
+### Gráfico de utilização do canal (requisito B)
+
+Transfere o mesmo arquivo com cada protocolo, variando a janela (1, 2, 4, 8, 16 e 32) e a
+perda (0% e 5%), num enlace de 1 Mbit/s com 20 ms de atraso:
+
+```
+python -m testes.experimentos
+python graficos/plot_utilizacao.py
+```
+
+O primeiro comando leva alguns minutos (use `--rapido` para uma conferência rápida) e
+grava `graficos/experimentos.jsonl`. O segundo gera `graficos/grafico_utilizacao.png` e
+`graficos/utilizacao_resumo.csv`. Veja `python -m testes.experimentos -h` para mudar
+janelas, perdas, atraso e taxa.
+
+### Controle de congestionamento no Mininet (requisito E, bônus)
+
+Precisa de Linux com Mininet e iperf3, e de permissão de administrador:
+
+```
+sudo python3 testes/topologia_gargalo.py
+```
+
+A topologia liga h1 a h2 por um switch: acesso de 100 Mbit/s e 5 ms, e gargalo de
+5 Mbit/s, 20 ms e fila de 15 pacotes. No CLI do Mininet, o tráfego é gerado com `iperf3`
+e a cwnd é coletada com `ss -ti`. As medições já coletadas estão em `capturas/` e os
+gráficos são gerados com:
+
+```
+python graficos/plot_cwnd.py
+python graficos/plot_fairness.py
+```
