@@ -1066,7 +1066,7 @@ A topologia (`testes/topologia_gargalo.py`) liga h1 a h2 por um switch: acesso d
 
 ![Figura 8.1: cwnd dos dois fluxos TCP](../graficos/grafico_fairness.png)
 
-*Figura 8.1 — cwnd dos dois fluxos TCP no gargalo de 5 Mbit/s (`graficos/grafico_fairness.png`). Depois do pico de 75 segmentos do fluxo 2 ao entrar, as duas curvas oscilam na mesma faixa, com quedas em momentos diferentes. Nota: as quedas até 10 segmentos que aparecem em toda a curva vêm de amostras da conexão de controle do iperf3 (cwnd fixa em 10), misturadas às da conexão de dados nos arquivos de captura; considerando só a conexão de dados, de 10 s a 20 s a cwnd oscila entre 27 e 39 segmentos no fluxo 1 e entre 19 e 41 no fluxo 2, como na tabela acima.*
+*Figura 8.1 — cwnd dos dois fluxos TCP no gargalo de 5 Mbit/s (`graficos/grafico_fairness.png`). Depois do pico de 75 segmentos do fluxo 2 ao entrar, as duas curvas oscilam na mesma faixa, com quedas em momentos diferentes. De 10 s a 20 s, a cwnd oscila entre 27 e 39 segmentos no fluxo 1 e entre 19 e 41 no fluxo 2, como na tabela acima.*
 
 - **Entrada do fluxo 2.** A partida lenta do fluxo 2 chega a 75 segmentos e enche a fila do gargalo; o fluxo 1 sofre uma redução logo depois (de 41 para cerca de 31 segmentos). Por isso o fluxo 2 também retransmitiu mais (1,78% contra 0,53%).
 - **Mesma regra, mesmo resultado.** Os RTTs mínimos são quase iguais (51,6 e 52,6 ms), então os dois crescem à mesma velocidade e a cwnd média ficou próxima (razão de 0,94 entre o fluxo 2 e o fluxo 1).
@@ -1101,7 +1101,7 @@ O tráfego TCP foi gerado com `iperf3` durante 15 s, e a janela de congestioname
 
 O gráfico evidencia o comportamento cíclico de **"dente-de-serra"** do algoritmo padrão do Linux (**TCP CUBIC**):
 
-- **Partida lenta (*Slow Start*):** No início da transmissão, o TCP aumenta a `cwnd` exponencialmente a cada RTT para sondar a banda disponível, preenchendo rapidamente o enlace e os 15 pacotes da fila do switch `s1`.
+- **Partida lenta (*Slow Start*):** No início da transmissão, o TCP aumenta a `cwnd` exponencialmente a cada RTT para sondar a banda disponível, preenchendo rapidamente o enlace e os 15 pacotes da fila do switch `s1`. Esse trecho inicial não aparece na Figura 9.1, que já começa com a `cwnd` em 27 segmentos; ele é visível na Figura 8.1, em que o fluxo 1 sobe de 10 a 46 segmentos em menos de 1 s e o fluxo 2 chega a 75 ao entrar.
 - **Saturação e descarte:** Quando a janela atinge o teto físico do caminho (picos entre **39 e 41 pacotes**, somando os pacotes em trânsito no enlace e os retidos no buffer), o pacote seguinte encontra a fila cheia e é descartado (*tail drop*).
 - **Redução multiplicativa do CUBIC:** Ao detectar a perda por ACKs duplicados, o remetente reduz a janela para aliviar o congestionamento. Diferente do TCP Reno clássico (que corta a `cwnd` pela metade), o CUBIC aplica um fator multiplicativo de aproximadamente **0,7**, fazendo a janela cair dos picos de ~40 pacotes para cerca de **28 pacotes** (com uma queda mais acentuada para 19 pacotes em ~7,6 s após perdas consecutivas).
 - **Recuperação em regime estável:** Após cada redução, a janela volta a crescer em função cúbica até atingir novamente o limite de ~40 pacotes, repetindo o ciclo ao longo de toda a transferência e mantendo o enlace gargalo próximo da ocupação máxima.
@@ -1175,8 +1175,7 @@ resume o que se observou, as limitações do trabalho e o que poderia vir a segu
 ## Referências
 
 1. KUROSE, J. F.; ROSS, K. W. **Redes de computadores e a Internet: uma abordagem
-   top-down.** São Paulo: Pearson. Capítulo 3, Camada de transporte (confirmar a edição
-   usada na disciplina).
+   top-down.** São Paulo: Pearson. Capítulo 3, Camada de transporte.
 2. POSTEL, J. **RFC 768: User Datagram Protocol.** IETF, 1980.
 3. EDDY, W. **RFC 9293: Transmission Control Protocol (TCP).** IETF, 2022.
 4. BRADEN, R.; BORMAN, D.; PARTRIDGE, C. **RFC 1071: Computing the Internet Checksum.** IETF,
