@@ -2,25 +2,67 @@
 
 **Disciplina:** Redes de Computadores, Universidade de Pernambuco (UPE)
 **Grupo 3:** Lucas, Márcio, João Pedro, João Vitor, José Fernando e Elias
-**Entrega:** 17/11/2026
-
-> **Como usar este documento.** Cada seção tem um responsável e um prazo. Quem for o
-> responsável apaga a caixa de instruções (as linhas que começam com `>`) e escreve o
-> texto no lugar. Não mexam nas seções dos outros: se algo estiver errado, avisem no
-> grupo. Figuras entram com caminho relativo a esta pasta, por exemplo
-> `![legenda](../graficos/grafico_utilizacao.png)`. Texto em Markdown simples
-> (títulos, listas, tabelas e imagens), porque o arquivo final será exportado para PDF.
-> Prazo para todas as seções: **domingo, 15/11**. O Márcio consolida na segunda, 16/11.
+**Entrega:** 17 de novembro de 2026
 
 ---
 
 ## 1. Introdução
 
-> **Responsável:** Márcio (escreve por último, depois das outras seções)
-> **O que escrever:** o problema (transporte confiável sobre um canal que perde e corrompe
-> pacotes), os objetivos do trabalho, as ferramentas usadas (Python, UDP, Wireshark,
-> Mininet) e um resumo de como o relatório está organizado.
+### 1.1 O problema
 
+A Internet entrega pacotes sem garantia: uma fila cheia descarta pacotes, o ruído do meio
+físico troca bits e o caminho pode entregar os dados fora de ordem. O IP não corrige nada
+disso, e o UDP, que só acrescenta portas e um checksum, herda todas essas falhas. O TCP resolve
+o problema, mas por dentro do sistema operacional, como uma caixa fechada.
+
+Este trabalho constrói essa confiabilidade **na camada de aplicação, sobre UDP**, para ver
+de perto como ela funciona. O grupo implementou em Python três protocolos de transferência
+confiável de arquivos, cada um mais eficiente que o anterior (rdt3.0, Go-Back-N e Repetição
+Seletiva), submeteu os três a um canal que perde e corrompe pacotes de forma controlada e,
+por fim, comparou o resultado com um protocolo real: o TCP, observado no Wireshark e no
+Mininet.
+
+### 1.2 Objetivos e requisitos
+
+O trabalho cobre cinco requisitos, e cada um tem uma seção neste relatório:
+
+| Requisito | O que foi feito | Seção |
+| --- | --- | --- |
+| A | rdt3.0, protocolo pare-e-espera sobre UDP, validado pelo SHA-256 do arquivo | 2 |
+| B | Janela deslizante: Go-Back-N e Repetição Seletiva, comparados ao rdt3.0 pela utilização do canal | 3, 4 e 5 |
+| C | Canal que perde, corrompe e atrasa pacotes, e suíte de 15 testes com logs | 6 |
+| D | Análise de uma conexão TCP real no Wireshark e texto sobre por que o TCP é justo | 7 e 8 |
+| E (bônus) | Controle de congestionamento do TCP: gráfico da janela de congestionamento no Mininet | 9 |
+
+Os artefatos pedidos são o código-fonte com os testes de perda e de corrupção, o gráfico de
+utilização do canal (Figura 5.1), o gráfico da janela de congestionamento (Figura 9.1), a
+captura TCP comentada (seção 7), a discussão sobre justiça do TCP (seção 8) e este relatório.
+
+### 1.3 Ferramentas e ambiente
+
+- **Python 3 e UDP.** Os protocolos, o canal e os testes usam só a biblioteca padrão
+  (`socket`, `struct`, `hashlib`, `threading`, `unittest`). Tudo roda em uma única máquina,
+  pela interface local.
+- **SHA-256.** Prova a entrega confiável: o hash do arquivo recebido tem de ser igual ao do
+  enviado.
+- **matplotlib.** Gera os gráficos de utilização do canal, da cwnd e de fairness.
+- **Wireshark.** Captura e dissecação de uma conexão TCP real (seção 7).
+- **Mininet e iperf3.** Emulam uma rede com enlace gargalo e geram o tráfego TCP, e o comando
+  `ss -ti` coleta a janela de congestionamento (seções 8 e 9).
+- **Git.** O código, os dados e este relatório ficam em um repositório compartilhado.
+
+### 1.4 Organização do relatório e do repositório
+
+As seções 2 a 4 apresentam os três protocolos, do mais simples ao mais eficiente. A seção 5
+compara a utilização do canal entre eles. A seção 6 descreve o canal que injeta falhas e os
+testes. As seções 7 a 9 voltam-se ao TCP: a conexão real, a justiça entre fluxos e o controle
+de congestionamento. A seção 10 reúne as conclusões, e o Apêndice explica como executar tudo.
+
+O repositório segue a mesma divisão: `common/` (pacote, canal, métricas), `rdt30/`, `gbn/` e
+`sr/` (um remetente e um receptor por protocolo), `testes/`, `capturas/`, `graficos/` e
+`relatorio/`. O `README.md` da raiz tem os comandos para rodar cada parte.
+
+---
 
 ## 2. rdt3.0: pare-e-espera sobre UDP
 
@@ -109,7 +151,11 @@ retransmite o pacote, e um ACK corrompido ou de número errado não muda o estad
 
 ![FSM do remetente rdt3.0](../graficos/fsm_rdt30_remetente.png)
 
+*Figura 2.1: FSM do remetente do rdt3.0 (`graficos/fsm_rdt30_remetente.png`).*
+
 ![FSM do receptor rdt3.0](../graficos/fsm_rdt30_receptor.png)
+
+*Figura 2.2: FSM do receptor do rdt3.0 (`graficos/fsm_rdt30_receptor.png`).*
 
 A tabela que liga cada elemento da FSM ao conceito da aula e ao trecho do código está em
 `relatorio/fsm_rdt30.md`.
@@ -224,7 +270,11 @@ trânsito** (temporizador ligado). O receptor tem um estado só, que espera o pa
 
 ![FSM do remetente Go-Back-N](../graficos/fsm_gbn_remetente.png)
 
+*Figura 3.1: FSM do remetente do Go-Back-N (`graficos/fsm_gbn_remetente.png`).*
+
 ![FSM do receptor Go-Back-N](../graficos/fsm_gbn_receptor.png)
+
+*Figura 3.2: FSM do receptor do Go-Back-N (`graficos/fsm_gbn_receptor.png`).*
 
 A tabela que liga cada elemento da FSM ao conceito da aula e ao trecho do código está em
 `relatorio/fsm_gbn.md`.
@@ -318,6 +368,8 @@ contribui para a queda em N = 32, porque o remetente demora mais para perceber a
 não guarda pacotes fora de ordem, por isso a Repetição Seletiva é mais eficiente em canais
 com perda. O número de sequência de 4 bytes evita a volta ao zero nos arquivos usados.
 
+---
+
 ## 4. Repetição Seletiva
 
 ### 4.1 Funcionamento
@@ -368,7 +420,11 @@ recepção e o buffer de pacotes fora de ordem.
 
 ![FSM do remetente da Repetição Seletiva](../graficos/fsm_sr_remetente.png)
 
+*Figura 4.1: FSM do remetente da Repetição Seletiva (`graficos/fsm_sr_remetente.png`).*
+
 ![FSM do receptor da Repetição Seletiva](../graficos/fsm_sr_receptor.png)
+
+*Figura 4.2: FSM do receptor da Repetição Seletiva (`graficos/fsm_sr_receptor.png`).*
 
 A tabela que liga cada elemento da FSM ao conceito da aula e ao trecho do código está em
 `relatorio/fsm_sr.md`.
@@ -438,7 +494,7 @@ SHA-256 do arquivo recebido igual ao do enviado. Os números vêm de
 O trecho abaixo, de `capturas/logs_testes/sr__10_de_perda.log` (linhas 7 a 20, sem o
 horário), mostra o buffer funcionando:
 
-```
+```text
 [sr.rx] FORA DE ORDEM seq=9 (rcv_base=8) -> guardado no buffer, ACK 9
 [sr.rx] FORA DE ORDEM seq=10 (rcv_base=8) -> guardado no buffer, ACK 10
 [sr.rx] FORA DE ORDEM seq=11 (rcv_base=8) -> guardado no buffer, ACK 11
@@ -494,6 +550,8 @@ SR aparece quando o canal tem capacidade limitada, como nos experimentos da seç
 **Limitações.** Como no GBN, o timeout é fixo (0,1 s), sem adaptação ao RTT medido. O
 receptor não avisa o remetente sobre o que falta: ele só confirma o que recebeu, e o remetente
 descobre a perda pelo timeout, sem retransmissão rápida.
+
+---
 
 ## 5. Comparação da utilização do canal
 
@@ -622,6 +680,8 @@ cerca de 94% do enlace, contra 16% do pare-e-espera. Quando o canal perde pacote
 retransmissão passa a importar: reenviar só o que se perdeu (SR) escala com a janela, e reenviar a janela
 inteira (GBN) deixa de compensar a partir de N = 8 e piora em N = 32, em que a utilização cai a menos da metade da SR.
 O custo da SR é a complexidade: um temporizador por pacote e um buffer no receptor.
+
+---
 
 ## 6. Injeção de falhas e testes
 
@@ -757,7 +817,7 @@ arquivos, sem o horário, para mostrar a mesma sequência em cada protocolo: o p
 
 **rdt3.0, ACK perdido** (`rdt30__10_de_perda.log`, linhas 1 a 3):
 
-```
+```text
 [rdt30.tx] TIMEOUT seq=0
 [rdt30.tx] RETRANSMISSÃO seq=0 (tentativa 2)
 [rdt30.rx] DUPLICADO seq=0 (esperado 1) -> descartado, reenvia ACK 0
@@ -770,7 +830,7 @@ ACK 0. É para isso que serve a numeração 0/1.
 
 **rdt3.0, corrupção** (`rdt30__s_corrup_o_20.log`, linhas 9 a 12):
 
-```
+```text
 [rdt30.rx] PACOTE CORROMPIDO detectado pelo checksum -> descartado, reenvia ACK 0
 [rdt30.tx] ACK CORROMPIDO detectado pelo checksum -> descartado
 [rdt30.tx] TIMEOUT seq=1
@@ -784,7 +844,7 @@ timeout, seguido da retransmissão do pacote 1.
 **Go-Back-N, perda** (`gbn__10_de_perda.log`, linhas 1, 2 e 12, com as linhas intermediárias
 omitidas):
 
-```
+```text
 [gbn.rx] FORA DE ORDEM seq=7 (esperado 6) -> descartado, reenvia ACK 5
 [gbn.tx] ACK 5 duplicado/inesperado (base=6) -> ignorado
 ...
@@ -798,7 +858,7 @@ repetidos. Quando o timeout de `base` estoura, ele **volta N** e reenvia toda a 
 
 **Repetição Seletiva, perda** (`sr__10_de_perda.log`, linhas 2 a 6):
 
-```
+```text
 [sr.tx] TIMEOUT seq=0
 [sr.tx] RETRANSMISSÃO seq=0 (tentativa 2)
 [sr.tx] TIMEOUT seq=6
@@ -835,6 +895,8 @@ A tabela abaixo liga cada mensagem dos logs ao conceito visto em aula:
 - **Parâmetros da suíte.** A suíte usa timeout de 50 ms e atraso zero. Os atrasos e a taxa de
   enlace aparecem só nos experimentos da seção 5. A linha de comando dos protocolos usa
   timeout padrão de 0,1 s.
+
+---
 
 ## 7. Análise de uma conexão TCP real
 
@@ -974,6 +1036,8 @@ O TCP usa ACK cumulativo, como o GBN, mas retransmite como a Repetição Seletiv
 - **O que a captura não mostra.** Como não houve perda de dados nem pacotes fora de ordem, não aparecem ACKs duplicados nem retransmissão rápida, e o SACK não foi negociado (o SYN-ACK do servidor não traz essa opção). Essas linhas da tabela vêm da especificação do TCP, não desta captura.
 - **Consequência prática.** Com ACK cumulativo, um ACK perdido costuma ser coberto pelo ACK seguinte, enquanto na SR a perda de um ACK individual faz o remetente retransmitir um pacote que o receptor já tinha.
 
+---
+
 ## 8. Por que o TCP é justo (fairness)
 
 O TCP é justo porque cada fluxo aumenta a janela de congestionamento de forma aditiva e a reduz de forma multiplicativa (AIMD), o que faz fluxos que dividem o mesmo gargalo convergirem para taxas iguais. Na medição feita no Mininet (gargalo de 5 Mbit/s, fila de 15 pacotes), a cwnd média foi de 34,3 segmentos no fluxo 1 e de 32,3 no fluxo 2 entre 10 s e 20 s, mesmo com o fluxo 2 entrando só aos 5 s.
@@ -1009,6 +1073,8 @@ A topologia (`testes/topologia_gargalo.py`) liga h1 a h2 por um switch: acesso d
 - **Divisão do gargalo.** Entre 5 s e 20 s, o fluxo 1 ficou com cerca de 53% dos bytes confirmados e o fluxo 2 com cerca de 47%, o que dá um índice de Jain de 0,997 (1 é igualdade perfeita).
 - **Ressalvas.** Foi uma única execução. O `ss` não grava horário, então o tempo foi estimado pelo campo `busy` de cada conexão, e por isso só a proporção entre os fluxos é usada, não as taxas absolutas. Os dois fluxos têm o mesmo RTT; com RTTs diferentes a divisão não seria igual.
 
+---
+
 ## 9. Controle de congestionamento (bônus)
 
 Para observar o controle de congestionamento do TCP em atuação, foi montada no Mininet uma topologia controlada com enlace gargalo (`testes/topologia_gargalo.py`), utilizando o controle de tráfego `TCLink` do kernel Linux.
@@ -1040,15 +1106,92 @@ O gráfico evidencia o comportamento cíclico de **"dente-de-serra"** do algorit
 - **Redução multiplicativa do CUBIC:** Ao detectar a perda por ACKs duplicados, o remetente reduz a janela para aliviar o congestionamento. Diferente do TCP Reno clássico (que corta a `cwnd` pela metade), o CUBIC aplica um fator multiplicativo de aproximadamente **0,7**, fazendo a janela cair dos picos de ~40 pacotes para cerca de **28 pacotes** (com uma queda mais acentuada para 19 pacotes em ~7,6 s após perdas consecutivas).
 - **Recuperação em regime estável:** Após cada redução, a janela volta a crescer em função cúbica até atingir novamente o limite de ~40 pacotes, repetindo o ciclo ao longo de toda a transferência e mantendo o enlace gargalo próximo da ocupação máxima.
 
+---
+
 ## 10. Conclusão
 
-> **Responsável:** Márcio (escreve por último)
-> **O que escrever:** o que o grupo aprendeu, os resultados principais (GBN versus SR,
-> pare-e-espera versus janela deslizante, TCP real) e as limitações do trabalho.
+Os três protocolos do grupo entregaram o arquivo idêntico ao original em todos os cenários de
+falha, e a comparação com o TCP mostrou de onde vêm as diferenças de desempenho. Esta seção
+resume o que se observou, as limitações do trabalho e o que poderia vir a seguir.
+
+### 10.1 Resultados principais
+
+- **Confiabilidade comprovada.** Os 15 testes (3 protocolos em 5 cenários, com até 20% de perda
+  ou de corrupção) terminaram com o SHA-256 do recebido igual ao do enviado, e toda corrupção
+  foi detectada pelo checksum (por exemplo, 139 de 139 no GBN).
+- **O pare-e-espera desperdiça o canal.** Com um enlace de 1 Mbit/s e RTT de 40 ms, o rdt3.0
+  usou 16,3% da taxa, perto dos 17% que a fórmula da aula prevê.
+- **A janela enche o canal.** GBN e SR chegam a cerca de 94% de utilização com N = 8, o que
+  corresponde aos aproximadamente 6 pacotes em trânsito necessários para ocupar o enlace.
+- **Com perda, a política de retransmissão decide.** Com 5% de perda e N = 32, a SR chegou a
+  62,3% de utilização e o GBN caiu para 28,9%. O GBN fez em média 119,7 retransmissões contra
+  7,7 da SR, porque reenvia a janela inteira a cada timeout. Os resultados com perda variam
+  bastante entre as repetições, então o que os números sustentam é a tendência, não a
+  diferença exata em cada ponto.
+- **O TCP real usa os mesmos mecanismos.** A captura mostrou o handshake de três vias, o ACK
+  cumulativo (um único ACK, com Ack=2881, confirmou dois segmentos) e a retransmissão por
+  timeout com recuo exponencial de 1, 2, 4 e 8 s no SYN.
+- **O TCP é justo e controla o congestionamento.** No gargalo de 5 Mbit/s, a cwnd mostrou o
+  dente-de-serra do CUBIC (redução a cerca de 0,7 do valor anterior, picos de 39 a 41
+  segmentos), e dois fluxos dividiram o enlace em 53% e 47% dos bytes confirmados, com índice
+  de Jain de 0,997.
+
+### 10.2 Limitações
+
+- **Timeout fixo.** Os protocolos do grupo usam um tempo limite constante, sem medir o RTT
+  como o TCP faz. Isso afeta sobretudo o GBN com janelas grandes.
+- **Poucas condições de teste.** Os experimentos usam duas taxas de perda (0% e 5%), um
+  arquivo de 100 KB, um RTT, uma taxa de enlace e 3 repetições por ponto. A corrupção foi
+  testada na suíte da seção 6, mas não entra na comparação de utilização.
+- **Corrupção de 1 bit.** O canal inverte um bit por pacote, caso que o checksum de 16 bits
+  sempre detecta. Corrupções de vários bits não foram testadas.
+- **Simulação em uma máquina.** O enlace é emulado por threads e temporizadores, então os
+  valores absolutos dependem do computador; as proporções entre os protocolos se mantêm.
+- **TCP observado em uma conexão e em uma execução.** A captura HTTP não teve perda de dados
+  nem pacotes fora de ordem, e a medição de fairness foi uma única execução, com os dois
+  fluxos com o mesmo RTT.
+
+### 10.3 Trabalhos futuros
+
+- Estimar o RTT e adaptar o timeout, como na RFC 6298.
+- Acrescentar a retransmissão rápida por ACKs repetidos e o ACK seletivo (SACK).
+- Dar ao remetente uma janela dinâmica, com um controle de congestionamento próprio sobre UDP.
+- Testar o canal com reordenação, mais taxas de perda e corrupção de vários bits, com um
+  CRC em lugar do checksum de 16 bits.
+
+### 10.4 Divisão do trabalho
+
+| Integrante | Frente |
+| --- | --- |
+| Lucas | formato do pacote, rdt3.0, enlace simulado, experimentos e gráfico de utilização, integração e entrega |
+| Márcio | Go-Back-N e consolidação deste relatório |
+| João Pedro | Repetição Seletiva, README e FSMs da SR |
+| João Vitor | canal com perda, corrupção e atraso, suíte de testes e logs |
+| José Fernando | captura e análise do TCP real, texto sobre justiça do TCP |
+| Elias | topologia no Mininet, medições da cwnd e gráficos, slides do seminário |
+
+---
 
 ## Referências
 
-> Livros e materiais da disciplina usados no trabalho.
+1. KUROSE, J. F.; ROSS, K. W. **Redes de computadores e a Internet: uma abordagem
+   top-down.** São Paulo: Pearson. Capítulo 3, Camada de transporte (confirmar a edição
+   usada na disciplina).
+2. POSTEL, J. **RFC 768: User Datagram Protocol.** IETF, 1980.
+3. EDDY, W. **RFC 9293: Transmission Control Protocol (TCP).** IETF, 2022.
+4. BRADEN, R.; BORMAN, D.; PARTRIDGE, C. **RFC 1071: Computing the Internet Checksum.** IETF,
+   1988.
+5. PAXSON, V. et al. **RFC 6298: Computing TCP's Retransmission Timer.** IETF, 2011.
+6. ALLMAN, M.; PAXSON, V.; BLANTON, E. **RFC 5681: TCP Congestion Control.** IETF, 2009.
+7. XU, L. et al. **RFC 9438: CUBIC for Fast and Long-Distance Networks.** IETF, 2023.
+8. CHIU, D.-M.; JAIN, R. Analysis of the increase and decrease algorithms for congestion
+   avoidance in computer networks. **Computer Networks and ISDN Systems**, v. 17, n. 1,
+   p. 1-14, 1989.
+9. WIRESHARK FOUNDATION. **Wireshark User's Guide.** Disponível em: https://www.wireshark.org/docs/.
+10. MININET PROJECT. **Mininet: an instant virtual network on your laptop.** Disponível em: https://mininet.org.
+11. ESNET. **iperf3 documentation.** Disponível em: https://software.es.net/iperf/.
+
+---
 
 ## Apêndice: como executar
 
@@ -1059,7 +1202,7 @@ Comandos para rodar cada protocolo, os testes e os experimentos. Todos são exec
 Cada protocolo tem um receptor e um remetente. Abra dois terminais e inicie o
 **receptor primeiro**. Exemplo com a Repetição Seletiva:
 
-```
+```bash
 python -m sr.receptor --porta 5000 --saida recebido.bin
 python -m sr.remetente arquivo.bin --porta 5000 --janela 8 --perda 0.1 --seed 42 -v
 ```
@@ -1095,7 +1238,7 @@ Transfere um arquivo de 100 KB em cada cenário (sem falhas, 10% de perda, 20% d
 20% de corrupção e 10% de perda + 10% de corrupção) e compara o SHA-256 do recebido com o
 do enviado:
 
-```
+```bash
 python -m testes.validar_rdt30
 python -m testes.validar_gbn
 python -m testes.validar_sr
@@ -1110,7 +1253,7 @@ Roda os 3 protocolos nos 5 cenários (15 testes). Além do hash, confere que o m
 recuperação foi realmente acionado: perda gera retransmissão, e toda corrupção é detectada
 pelo checksum.
 
-```
+```bash
 python -m unittest testes.test_suite -v
 python -m testes.teste_canal
 ```
@@ -1125,7 +1268,7 @@ contada e toda corrupção é detectada.
 Transfere o mesmo arquivo com cada protocolo, variando a janela (1, 2, 4, 8, 16 e 32) e a
 perda (0% e 5%), num enlace de 1 Mbit/s com 20 ms de atraso:
 
-```
+```bash
 python -m testes.experimentos
 python graficos/plot_utilizacao.py
 ```
@@ -1139,7 +1282,7 @@ janelas, perdas, atraso e taxa.
 
 Precisa de Linux com Mininet e iperf3, e de permissão de administrador:
 
-```
+```bash
 sudo python3 testes/topologia_gargalo.py
 ```
 
@@ -1148,7 +1291,7 @@ A topologia liga h1 a h2 por um switch: acesso de 100 Mbit/s e 5 ms, e gargalo d
 e a cwnd é coletada com `ss -ti`. As medições já coletadas estão em `capturas/` e os
 gráficos são gerados com:
 
-```
+```bash
 python graficos/plot_cwnd.py
 python graficos/plot_fairness.py
 ```

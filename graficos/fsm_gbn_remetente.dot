@@ -15,13 +15,13 @@ digraph gbn_remetente {
 
   // transições (caixas)
   node [shape=box, style="rounded,filled", fillcolor="#fff8e1", fontsize=10];
-  t_primeiro [label="evento: há dados\nação: make(DADOS, proximo) ; sendto ;\niniciar temporizador ; proximo++"];
-  t_envia    [label="evento: há dados e proximo < base + N\nação: make(DADOS, proximo) ; sendto ; proximo++"];
-  t_ack      [label="evento: ACK íntegro, ack ≥ base (cumulativo)\nação: base = ack + 1 ;\nse base < proximo, reiniciar temporizador"];
-  t_ignora   [label="evento: ACK corrompido ou ack < base\nação: ignora"];
-  t_timeout  [label="evento: timeout (go back N)\nação: reiniciar temporizador ;\nretransmite pacotes base .. proximo - 1"];
-  t_esvazia  [label="evento: ACK íntegro, ack ≥ base e base == proximo\nação: base = ack + 1 ; parar temporizador"];
-  t_fim      [label="evento: ACK do pacote FIM (base > seq_fim)\nação: encerra a transferência"];
+  t_primeiro [label="evento: há dados\nação: make(DADOS, proximo) ;\nsendto ; iniciar temporizador ;\nproximo++"];
+  t_envia    [label="evento: há dados e\nproximo < base + N\nação: make(DADOS, proximo) ;\nsendto ; proximo++"];
+  t_ack      [label="evento: ACK íntegro,\nack ≥ base (cumulativo)\nação: base = ack + 1 ;\nse base < proximo,\nreiniciar temporizador"];
+  t_ignora   [label="evento: ACK corrompido\nou ack < base\nação: ignora"];
+  t_timeout  [label="evento: timeout (go back N)\nação: reiniciar temporizador ;\nretransmite pacotes\nbase .. proximo - 1"];
+  t_esvazia  [label="evento: ACK íntegro,\nack ≥ base e base == proximo\nação: base = ack + 1 ;\nparar temporizador"];
+  t_fim      [label="evento: ACK do pacote FIM\n(base > seq_fim)\nação: encerra a transferência"];
 
   ini -> vazia;
   vazia -> t_primeiro -> transito;
