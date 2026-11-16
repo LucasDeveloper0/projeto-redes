@@ -23,15 +23,15 @@ pacote é descartado e o receptor repete o ACK do último pacote entregue em ord
 
 ## Ligação com a aula e com o código
 
-| Elemento da FSM | Conceito da aula | Onde está no código |
-| --- | --- | --- |
-| `base` e `proximo` | Janela deslizante: `base` é o pacote mais antigo sem ACK e `proximo` é o próximo a enviar | variáveis `base` e `proximo` em `gbn/remetente.py` |
-| `proximo < base + N` | Só pode haver N pacotes em trânsito ao mesmo tempo (controle pela janela) | laço "enche a janela" em `enviar_arquivo()` |
-| Temporizador único | O GBN mede o tempo só do pacote `base` | variável `prazo` em `gbn/remetente.py` |
-| ACK cumulativo (`base = ack + 1`) | `ack = k` confirma todos os pacotes até `k` de uma vez | trecho "ACK cumulativo" em `enviar_arquivo()` |
-| `timeout (go back N)` | Ao estourar o tempo, reenvia **toda** a janela a partir de `base` | bloco "timeout" em `enviar_arquivo()`, que chama `transmitir(..., retransmissao=True)` |
-| ACK corrompido ou `ack < base` | ACK com checksum inválido ou repetido não faz a janela andar | `Packet.extract()` devolve `None`; contador `acks_corrompidos` e `acks_duplicados` |
-| `seq == esperado` | O receptor GBN não guarda pacotes fora de ordem, aceita só o esperado | variável `esperado` em `gbn/receptor.py` |
-| Descarta e reenvia o último ACK | Pacote fora de ordem, duplicado ou corrompido não é entregue, e o ACK cumulativo anterior é repetido | função `repetir_ack()` em `gbn/receptor.py` |
-| Pacote FIM (dados vazios) | Marca o fim do arquivo e passa pela janela como um pacote comum | `seq_fim` em `gbn/remetente.py` e `if not payload` em `gbn/receptor.py` |
-| `linger` | Depois do FIM, o receptor continua respondendo caso o último ACK tenha se perdido | laço final de `receber_arquivo()` em `gbn/receptor.py` |
+| Elemento da FSM                   | Conceito da aula                                                                                     | Onde está no código                                                                    |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `base` e `proximo`                | Janela deslizante: `base` é o pacote mais antigo sem ACK e `proximo` é o próximo a enviar            | variáveis `base` e `proximo` em `gbn/remetente.py`                                     |
+| `proximo < base + N`              | Só pode haver N pacotes em trânsito ao mesmo tempo (controle pela janela)                            | laço "enche a janela" em `enviar_arquivo()`                                            |
+| Temporizador único                | O GBN mede o tempo só do pacote `base`                                                               | variável `prazo` em `gbn/remetente.py`                                                 |
+| ACK cumulativo (`base = ack + 1`) | `ack = k` confirma todos os pacotes até `k` de uma vez                                               | trecho "ACK cumulativo" em `enviar_arquivo()`                                          |
+| `timeout (go back N)`             | Ao estourar o tempo, reenvia **toda** a janela a partir de `base`                                    | bloco "timeout" em `enviar_arquivo()`, que chama `transmitir(..., retransmissao=True)` |
+| ACK corrompido ou `ack < base`    | ACK com checksum inválido ou repetido não faz a janela andar                                         | `Packet.extract()` devolve `None`; contador `acks_corrompidos` e `acks_duplicados`     |
+| `seq == esperado`                 | O receptor GBN não guarda pacotes fora de ordem, aceita só o esperado                                | variável `esperado` em `gbn/receptor.py`                                               |
+| Descarta e reenvia o último ACK   | Pacote fora de ordem, duplicado ou corrompido não é entregue, e o ACK cumulativo anterior é repetido | função `repetir_ack()` em `gbn/receptor.py`                                            |
+| Pacote FIM (dados vazios)         | Marca o fim do arquivo e passa pela janela como um pacote comum                                      | `seq_fim` em `gbn/remetente.py` e `if not payload` em `gbn/receptor.py`                |
+| `linger`                          | Depois do FIM, o receptor continua respondendo caso o último ACK tenha se perdido                    | laço final de `receber_arquivo()` em `gbn/receptor.py`                                 |
