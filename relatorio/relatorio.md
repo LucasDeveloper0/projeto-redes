@@ -151,11 +151,11 @@ retransmite o pacote, e um ACK corrompido ou de número errado não muda o estad
 
 ![FSM do remetente rdt3.0](../graficos/fsm_rdt30_remetente.png)
 
-*Figura 2.1: FSM do remetente do rdt3.0 (`graficos/fsm_rdt30_remetente.png`).*
+*Figura 2.1 — FSM do remetente do rdt3.0 (`graficos/fsm_rdt30_remetente.png`).*
 
 ![FSM do receptor rdt3.0](../graficos/fsm_rdt30_receptor.png)
 
-*Figura 2.2: FSM do receptor do rdt3.0 (`graficos/fsm_rdt30_receptor.png`).*
+*Figura 2.2 — FSM do receptor do rdt3.0 (`graficos/fsm_rdt30_receptor.png`).*
 
 A tabela que liga cada elemento da FSM ao conceito da aula e ao trecho do código está em
 `relatorio/fsm_rdt30.md`.
@@ -270,11 +270,11 @@ trânsito** (temporizador ligado). O receptor tem um estado só, que espera o pa
 
 ![FSM do remetente Go-Back-N](../graficos/fsm_gbn_remetente.png)
 
-*Figura 3.1: FSM do remetente do Go-Back-N (`graficos/fsm_gbn_remetente.png`).*
+*Figura 3.1 — FSM do remetente do Go-Back-N (`graficos/fsm_gbn_remetente.png`).*
 
 ![FSM do receptor Go-Back-N](../graficos/fsm_gbn_receptor.png)
 
-*Figura 3.2: FSM do receptor do Go-Back-N (`graficos/fsm_gbn_receptor.png`).*
+*Figura 3.2 — FSM do receptor do Go-Back-N (`graficos/fsm_gbn_receptor.png`).*
 
 A tabela que liga cada elemento da FSM ao conceito da aula e ao trecho do código está em
 `relatorio/fsm_gbn.md`.
@@ -420,11 +420,11 @@ recepção e o buffer de pacotes fora de ordem.
 
 ![FSM do remetente da Repetição Seletiva](../graficos/fsm_sr_remetente.png)
 
-*Figura 4.1: FSM do remetente da Repetição Seletiva (`graficos/fsm_sr_remetente.png`).*
+*Figura 4.1 — FSM do remetente da Repetição Seletiva (`graficos/fsm_sr_remetente.png`).*
 
 ![FSM do receptor da Repetição Seletiva](../graficos/fsm_sr_receptor.png)
 
-*Figura 4.2: FSM do receptor da Repetição Seletiva (`graficos/fsm_sr_receptor.png`).*
+*Figura 4.2 — FSM do receptor da Repetição Seletiva (`graficos/fsm_sr_receptor.png`).*
 
 A tabela que liga cada elemento da FSM ao conceito da aula e ao trecho do código está em
 `relatorio/fsm_sr.md`.
@@ -598,7 +598,7 @@ SHA-256 de cada transferência e grava uma linha de métricas por execução em
 
 ![Utilização do canal: pare-e-espera, GBN e SR](../graficos/grafico_utilizacao.png)
 
-*Figura 5.1: utilização do canal em função da janela N, sem perda (esquerda) e com 5% de perda
+*Figura 5.1 — utilização do canal em função da janela N, sem perda (esquerda) e com 5% de perda
 (direita). A linha pontilhada é o limite teórico; as barras vão do mínimo ao máximo das 3
 repetições.*
 
